@@ -1,4 +1,5 @@
-import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { createFeatureSelector, createSelector, select } from "@ngrx/store";
+import { pipe, filter } from "rxjs";
 import { Web3State } from "./models";
 import * as reducer from './reducer'
 
@@ -12,7 +13,25 @@ export const selectWeb3State = createFeatureSelector<Web3State>(
 
  const isInitializing = createSelector(
     selectWeb3State,
-     (state: Web3State) => state
+     (state: Web3State) => state.initializing
   );
 
-  export const web3Selectors = { isInitializing};
+  export const selectChainReady = pipe(
+    select(isInitializing),
+    filter(val => val == false)
+   );
+   
+  
+export const getContractByKey = (key:string) => 
+    createSelector(
+    selectWeb3State,
+     (state: Web3State) =>  state.contract[key]
+  );
+
+
+
+
+  export const web3Selectors = { 
+      isInitializing,
+      selectChainReady, 
+      getcontractSelector};

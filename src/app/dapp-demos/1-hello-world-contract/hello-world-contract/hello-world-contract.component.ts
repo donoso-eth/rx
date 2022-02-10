@@ -16,7 +16,11 @@ import {
   convertUSDtoEther,
   NotifierService,
   IABI_OBJECT,
+  Web3State,
+  web3Selectors,
 } from 'angular-web3';
+import { select, Store } from '@ngrx/store';
+import { filter, first, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'hello-world-contract',
@@ -46,7 +50,8 @@ export class HelloWorldContractComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     private notifierService:NotifierService,
-    private onChainService: OnChainService
+    private onChainService: OnChainService,
+    private store:Store<Web3State>
   ) {}
 
   async onChainStuff() {
@@ -202,6 +207,12 @@ export class HelloWorldContractComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store
+    .pipe((web3Selectors.selectChainReady),first())
+    .subscribe(async ()=> {
+        const myContract = await firstValueFrom(this.store.select(web3Selectors.getcontractSelector))
+    })
+
     this.onChainStuff();
   }
 }

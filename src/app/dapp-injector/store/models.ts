@@ -1,9 +1,9 @@
 export interface Web3State {
     initializing:boolean;
     chainIsReady: boolean;
-    provider:{[id:number]: any}
+    provider:{[key:string]: any}
     signer:any,
-    contracts:{[id:number]: any}
+    contract:{[key:string]: any}
     isNetworkBusy:boolean;
     
   }

@@ -16,7 +16,7 @@ export const initialState: Web3State = {
   chainIsReady: false,
   provider:{},
   signer:{},
-  contracts:{},
+  contract:{},
   isNetworkBusy:true
 };
 
