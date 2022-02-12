@@ -123,6 +123,9 @@ export class OnChainService {
 
    this.store.dispatch(Web3Actions.chainLoad({ status: false }));
    this.store.dispatch(Web3Actions.chainBusy({ status: false }));
+
+  this.store.dispatch(Web3Actions.setDollarExhange({exchange:12}))
+
   }
 
 

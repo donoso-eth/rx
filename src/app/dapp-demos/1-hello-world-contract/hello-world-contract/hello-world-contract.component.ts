@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
-import { Contract, ethers } from 'ethers';
+import { Contract, ethers, Signer } from 'ethers';
 
 import { OnChainService } from '../on-chain.service';
 
@@ -49,6 +49,7 @@ export class HelloWorldContractComponent implements OnInit {
   dollarExchange!: number;
   balanceDollar!: number;
   myContract!: IMETA_CONTRACT;
+  signer!: Signer ;
   constructor(
     private dialogService: DialogService,
     private notifierService: NotifierService,
@@ -223,13 +224,13 @@ export class HelloWorldContractComponent implements OnInit {
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
       console.log(value);
       this.myContract = this.onChainService.config.contracts['myContract'];
-
+      this.signer = this.onChainService.config.signer as Signer
       this.onChainStuff();
     });
 
     this.store
       .select(web3Selectors.isNetworkBusy)
-      .subscribe((isBusy) =>  {
+      .subscribe((isBusy:boolean) =>  {
         console.log(isBusy)
         this.blockchain_is_busy = isBusy});
   }

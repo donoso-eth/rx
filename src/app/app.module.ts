@@ -9,6 +9,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { HelloWorldContractModule } from './dapp-demos/1-hello-world-contract/hello-world-contract.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugContractModule } from './dapp-demos/2-debug-contract/debug-contract.module';
+import { OnChainService } from './dapp-demos/1-hello-world-contract/on-chain.service';
+import { WalletdisplaytModule } from 'angular-web3';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +23,7 @@ import { DebugContractModule } from './dapp-demos/2-debug-contract/debug-contrac
     HelloWorldContractModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [OnChainService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

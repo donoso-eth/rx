@@ -1,12 +1,19 @@
 import { createFeatureSelector, createSelector, select } from '@ngrx/store';
-import { pipe, filter } from 'rxjs';
+import { pipe, filter, map } from 'rxjs';
 import { Web3State } from './models';
 import * as reducer from './reducer';
 
-export const selectState = (state: Web3State) => state;
+//export const selectState = (state: Web3State) => state;
 
 export const selectWeb3State = createFeatureSelector<Web3State>(
   reducer.web3FeatureKey
+);
+
+//
+
+const selectState  = createSelector(
+  selectWeb3State,
+  (state: Web3State) => state
 );
 
 const isInitializing = createSelector(
@@ -24,8 +31,16 @@ const isNetworkBusy = createSelector(
   (state: Web3State) => state.isNetworkBusy
 );
 
+
+const selectDollarExchange= pipe(
+  select(selectState),
+  filter((val) => val.etherToDollar !== 0),
+  map(map=> map.etherToDollar)
+);
+
 export const web3Selectors = {
   isInitializing,
   selectChainReady,
   isNetworkBusy,
+  selectDollarExchange
 };

@@ -13,7 +13,8 @@ import { Web3State } from './models';
 
 export const initialState: Web3State = {
   initializing:true,
-  isNetworkBusy:true
+  isNetworkBusy:true,
+  etherToDollar:0
 };
 
 
@@ -23,6 +24,7 @@ const web3dReducer = createReducer(
   initialState,
   on(web3Actions.Web3Actions.chainLoad, (state,{status}) => ({ ...state, initializing:status})),
   on(web3Actions.Web3Actions.chainBusy, (state,{status}) => ({ ...state, isNetworkBusy:status})),
+  on(web3Actions.Web3Actions.setDollarExhange, (state,{exchange}) => ({ ...state, etherToDollar:exchange})),
 
 );
 export function we3ReducerFunction(state: Web3State | undefined, action: Action) {

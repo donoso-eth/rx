@@ -1,12 +1,12 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef,  EventEmitter,  Input,  Output,  Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { createIcon } from '@download/blockies';
 import { Store } from '@ngrx/store';
-import { AngularWallet, convertWeiToEther ,  displayEther,
-  displayUsd,
-  web3Selectors,
-  Web3State} from 'angular-web3';
-import { OnChainService } from 'src/app/dapp-demos/1-hello-world-contract/on-chain.service';
+import { Signer } from 'ethers';
+import { first, firstValueFrom } from 'rxjs';
 
+import { OnChainService } from  '../../../dapp-demos/1-hello-world-contract/on-chain.service';
+import { convertWeiToEther, displayEther, displayUsd } from '../../helpers';
+import { web3Selectors, Web3State } from '../../store';
 
 
 
@@ -19,40 +19,47 @@ export class WalletDisplayComponent implements AfterViewInit {
   blockiesOptions:any;
   address_to_show!:string;
   balance!: { ether: any; usd: any; };
-  myWallet: any;
+  dollarExhange!: number;
 
-  constructor(private renderer:Renderer2, private onChainService:OnChainService,   private store: Store<Web3State>) {
+
+  constructor(private renderer:Renderer2,   private store: Store<Web3State>) {
 
    }
 
-   async convertWeitoDisplay(balance:number) {
+   @Input()  public signer!: Signer;
+
+   async convertWeitoDisplay(balance:any) {
     const ehterbalance = convertWeiToEther(balance);
     const dollar =
-      ehterbalance * (await this.onChainService.getDollarEther());
+      ehterbalance * this.dollarExhange
     this.balance = {
       ether: displayEther(ehterbalance),
       usd: displayUsd(dollar),
     };
    }  
 
-  ngOnChanges(changes: SimpleChanges): void {
-
-  }
 
   @ViewChild("wallet", {read: ElementRef}) private walletDiv!: ElementRef;
+  @Output() doFaucetEvent = new EventEmitter();
+  @Output() openTransactionEvent = new EventEmitter();
 
+  openTransaction(){
+    this.openTransactionEvent.emit()
+  }
 
   doFaucet(){
-
+    this.doFaucetEvent.emit()
   }
 
   ngAfterViewInit(): void {
 
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
       console.log(value);
-      this.myWallet= this.onChainService.config.signer;
-      this.address_to_show = await this.myWallet.getAddress()
-      const balance = await this.myWallet.getBalance();
+    
+      this.address_to_show = await this.signer.getAddress()
+      const balance = await this.signer.getBalance();
+
+      this.dollarExhange = await firstValueFrom(this.store.pipe(web3Selectors.selectDollarExchange));
 
       this.blockiesOptions = { // All options are optional
         seed: this.address_to_show, // seed used to generate icon data, default: random
@@ -65,10 +72,10 @@ export class WalletDisplayComponent implements AfterViewInit {
         // that look like eyes, mouths and noses.
       }
      // await this.myWallet.refreshWalletBalance()
+     this.convertWeitoDisplay(balance)
     });
 
-     //  this.address_to_show =  await this.myWallet._myWallet.getAddress()
-
+   
 
     const icon = createIcon(this.blockiesOptions);
     
