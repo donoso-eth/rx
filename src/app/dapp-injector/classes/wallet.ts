@@ -12,6 +12,7 @@ export class AngularWallet {
 
   get wallet() {
     if (this._myWallet == undefined) {
+  
       throw new Error('Wallwt not yet initialized');
     }
     return this._myWallet;

@@ -7,13 +7,10 @@ import { mergeMap, map, catchError, EMPTY, of } from "rxjs";
 export class MovieEffects {
  
   loadMovies$ = createEffect(() => this.actions$.pipe(
-    ofType('[Chain] Load'),
-    mergeMap(()=> this.getAll()
-    .pipe(
-      map((movies)=> ({ type: '[Chain] Loaded' })),
-      catchError(() => EMPTY)
-      ))
-    ) );
+    ofType('[Chain] Ready'),
+    map( ()=> ({ type: '[Chain] Loaded' } )),
+    catchError(() => EMPTY)))
+
  
   constructor(
     private actions$: Actions,

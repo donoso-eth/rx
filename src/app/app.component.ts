@@ -17,13 +17,11 @@ export class AppComponent {
    */
   constructor(private store:Store<Web3State>) {
 
-    this.store.pipe(select(web3Selectors.isInitializing)).subscribe((x:any)=> console.log(x))
+    this.store.dispatch(Web3Actions.chainMount)
 
-    setTimeout(()=> {
-      store.dispatch(Web3Actions.loadChain());
-      console.log('change')
-    },1000)
-
+   // this.store.pipe(select(web3Selectors.isInitializing)).subscribe((x:any)=> console.log(x))
+ 
+   
   }
   
 }

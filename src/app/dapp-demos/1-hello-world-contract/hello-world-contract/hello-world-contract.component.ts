@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
-import { ethers } from 'ethers';
+import { Contract, ethers } from 'ethers';
 
 import { OnChainService } from '../on-chain.service';
 
@@ -18,9 +18,10 @@ import {
   IABI_OBJECT,
   Web3State,
   web3Selectors,
+  IMETA_CONTRACT,
 } from 'angular-web3';
-import { select, Store } from '@ngrx/store';
-import { filter, first, firstValueFrom } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { first, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'hello-world-contract',
@@ -29,16 +30,16 @@ import { filter, first, firstValueFrom } from 'rxjs';
 })
 export class HelloWorldContractComponent implements OnInit {
   blocks: Array<BlockWithTransactions> = [];
-  contract_abi!: Array<IABI_OBJECT>;
+
   walletBalance!: IBALANCE;
   contractBalance!: IBALANCE;
   contractHeader!: ICONTRACT;
-  deployer_address!:string;
-  myContract!: ethers.Contract;
+  deployer_address!: string;
+  //  myContract!: ethers.Contract;
   greeting!: string;
   greeting_input!: string;
   provider!: ethers.providers.JsonRpcProvider;
-  signer: any;
+  //  signer: any;
   deployer_balance: any;
   loading_contract: 'loading' | 'found' | 'error' = 'loading';
   blockchain_is_busy = true;
@@ -47,63 +48,63 @@ export class HelloWorldContractComponent implements OnInit {
 
   dollarExchange!: number;
   balanceDollar!: number;
+  myContract!: IMETA_CONTRACT;
   constructor(
     private dialogService: DialogService,
-    private notifierService:NotifierService,
+    private notifierService: NotifierService,
     private onChainService: OnChainService,
-    private store:Store<Web3State>
+    private store: Store<Web3State>
   ) {}
 
   async onChainStuff() {
     try {
-    await this.onChainService.init();
+      // await this.onChainService.init();
 
-    this.deployer_address =
-      await this.onChainService.myProvider.Signer.getAddress();
+      this.deployer_address =
+        await this.onChainService.config.signer!.getAddress();
 
-    this.onChainService.myProvider.blockEventSubscription.subscribe(
-      async (blockNr) => {
-        this.onChainService.helloWorldContract.refreshBalance();
-        this.onChainService.newWallet.refreshWalletBalance();
-        this.blockchain_is_busy = false;
-        const block =
-          await this.onChainService.myProvider.Provider.getBlockWithTransactions(
-            blockNr
-          );
-       this.blocks = [block].concat(this.blocks);
-      }
-    );
+      // this.onChainService.myProvider.blockEventSubscription.subscribe(
+      //   async (blockNr) => {
+      //     this.onChainService.helloWorldContract.refreshBalance();
+      //     this.onChainService.newWallet.refreshWalletBalance();
+      //     this.blockchain_is_busy = false;
+      //     const block =
+      //       await this.onChainService.myProvider.Provider.getBlockWithTransactions(
+      //         blockNr
+      //       );
+      //     this.blocks = [block].concat(this.blocks);
+      //   }
+      // );
 
-      this.newWallet = await this.onChainService.newWallet.wallet;
-      this.myContract = this.onChainService.helloWorldContract.Contract;
+      // this.newWallet = await this.onChainService.newWallet.wallet;
 
-      this.onChainService.helloWorldContract.contractBalanceSubscription.subscribe(
-        async (balance) => {
-          const ehterbalance = convertWeiToEther(balance);
-          const dollar =
-            ehterbalance * (await this.onChainService.getDollarEther());
-          this.contractBalance = {
-            ether: displayEther(ehterbalance),
-            usd: displayUsd(dollar),
-          };
-        }
-      );
+      // this.onChainService.helloWorldContract.contractBalanceSubscription.subscribe(
+      //   async (balance) => {
+      //     const ehterbalance = convertWeiToEther(balance);
+      //     const dollar =
+      //       ehterbalance * (await this.onChainService.getDollarEther());
+      //     this.contractBalance = {
+      //       ether: displayEther(ehterbalance),
+      //       usd: displayUsd(dollar),
+      //     };
+      //   }
+      // );
 
-      this.onChainService.newWallet.walletBalanceSubscription.subscribe(
-        async (balance) => {
-          const ehterbalance = convertWeiToEther(balance);
-          const dollar =
-            ehterbalance * (await this.onChainService.getDollarEther());
-          this.walletBalance = {
-            ether: displayEther(ehterbalance),
-            usd: displayUsd(dollar),
-          };
-        }
-      );
+      // this.onChainService.newWallet.walletBalanceSubscription.subscribe(
+      //   async (balance) => {
+      //     const ehterbalance = convertWeiToEther(balance);
+      //     const dollar =
+      //       ehterbalance * (await this.onChainService.getDollarEther());
+      //     this.walletBalance = {
+      //       ether: displayEther(ehterbalance),
+      //       usd: displayUsd(dollar),
+      //     };
+      //   }
+      // );
 
       this.contractHeader = {
-        name: this.onChainService.helloWorldContract.metadata.name,
-        address: this.onChainService.helloWorldContract.metadata.address,
+        name: this.myContract.name,
+        address: this.myContract.address,
       };
 
       //  this.dappInjectorService.blockchain_busy.subscribe(loading=> {
@@ -117,21 +118,25 @@ export class HelloWorldContractComponent implements OnInit {
     }
   }
 
-  async addBlock(blockNr:number) {
+  async addBlock(blockNr: number) {
     const block =
-    await this.onChainService.myProvider.Provider.getBlockWithTransactions(
-      blockNr
-    );
+      await this.onChainService.myProvider.Provider.getBlockWithTransactions(
+        blockNr
+      );
     this.blocks = this.blocks.concat(block);
-
   }
 
   async displayGreeting() {
-    this.greeting = await this.onChainService.helloWorldContract.Contract['greet']();
-    this.deployer_balance = ethers.utils.formatUnits(
-      await this.newWallet.getBalance(),
-      18
-    );
+    this.greeting = await this.onChainService.runfunction({
+      contractKey: 'myContract',
+      method: 'greet',
+      args: [],
+    });
+    console.log(this.greeting);
+    // this.deployer_balance = ethers.utils.formatUnits(
+    //   await this.newWallet.getBalance(),
+    //   18
+    // );
     this.loading_contract = 'found';
   }
 
@@ -152,11 +157,9 @@ export class HelloWorldContractComponent implements OnInit {
   }
 
   async openTransaction() {
-    console.log( await this.onChainService.getDollarEther())
+    console.log(await this.onChainService.getDollarEther());
     this.blockchain_is_busy = true;
     const res = await this.dialogService.openDialog();
-
-  
 
     if (res && res.type == 'transaction') {
       const usd = res.amount;
@@ -179,16 +182,22 @@ export class HelloWorldContractComponent implements OnInit {
         transaction_result
       );
     } else {
-    this.blockchain_is_busy = false;
+      this.blockchain_is_busy = false;
     }
   }
 
   async changeGreeting() {
-    this.blockchain_is_busy = true;
+  
     if (this.greeting_input == undefined) {
       alert('No Greeting found, be nice!!');
       return;
     }
+
+    const transaction_result = await this.onChainService.runfunction({
+      contractKey: 'myContract',
+      method: 'setGreeting',
+      args: [this.greeting_input],
+    });
 
     // const myFucntion = this.myContract.functions['setGreeting'];
     // const myResult = await this.dappInjectorService.dispatchContractFunction(
@@ -197,22 +206,31 @@ export class HelloWorldContractComponent implements OnInit {
     //   'payable'
     // );
 
-    const transaction_result = await this.onChainService.helloWorldContract.runTransactionFunction(
-      'setGreeting',
-      [this.greeting_input]
+    
+    // const transaction_result =
+    //   await this.onChainService.helloWorldContract.runTransactionFunction(
+    //     'setGreeting',
+    //     [this.greeting_input]
+    //   );
+   // this.blockchain_is_busy = false;
+    await this.notifierService.showNotificationTransaction(
+      transaction_result.msg
     );
-    this.blockchain_is_busy = false;
-    await this.notifierService.showNotificationTransaction(transaction_result.msg);
     this.displayGreeting();
   }
 
   ngOnInit(): void {
-    this.store
-    .pipe((web3Selectors.selectChainReady),first())
-    .subscribe(async ()=> {
-        const myContract = await firstValueFrom(this.store.select(web3Selectors.getcontractSelector))
-    })
+    this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
+      console.log(value);
+      this.myContract = this.onChainService.config.contracts['myContract'];
 
-    this.onChainStuff();
+      this.onChainStuff();
+    });
+
+    this.store
+      .select(web3Selectors.isNetworkBusy)
+      .subscribe((isBusy) =>  {
+        console.log(isBusy)
+        this.blockchain_is_busy = isBusy});
   }
 }

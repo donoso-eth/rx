@@ -71,6 +71,13 @@ const config: HardhatUserConfig = {
     artifacts: '../src/assets/artifacts'
   },
   networks: {
+    hardhat: {
+      chainId: 1337,
+    },
+    localhost: {
+      url: 'http://localhost:8545',
+      chainId: 1337,
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || "",
       accounts:

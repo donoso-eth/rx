@@ -12,7 +12,7 @@ const tinker = async () => {
 
     // ADDRESS TO MINT TO:
     
-    const toDeployContract = contract_config["helloWorldContract"]
+    const toDeployContract = contract_config["debugContract"]
    
     if (toDeployContract == undefined){
       console.error("Your contract is not yet configured")

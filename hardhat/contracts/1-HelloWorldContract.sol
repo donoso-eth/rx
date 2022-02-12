@@ -6,6 +6,7 @@ import "hardhat/console.sol";
 contract HelloWorldContract {
     string private greeting;
     string public testpublic = 'ahora public';
+ 
     event SetPurpose(uint purpose,address sender);
     
     constructor(string memory _greeting) {
@@ -22,7 +23,7 @@ contract HelloWorldContract {
     }
 
     function setGreeting(string memory _greeting) public payable {
-      
+        require(keccak256(bytes(_greeting)) == keccak256(bytes( 'hola')),'NOT HOLA');
         greeting = _greeting;
     }
 
