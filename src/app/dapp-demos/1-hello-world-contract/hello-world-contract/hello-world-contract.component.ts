@@ -138,11 +138,11 @@ export class HelloWorldContractComponent implements OnInit {
   }
 
   async displayGreeting() {
-    this.greeting = await this.dappInjectorService.runfunction({
+    this.greeting =(await this.dappInjectorService.runfunction({
       contractKey: 'myContract',
       method: 'greet',
       args: [],
-    });
+    })).payload;
     console.log(this.greeting);
     // this.deployer_balance = ethers.utils.formatUnits(
     //   await this.newWallet.getBalance(),

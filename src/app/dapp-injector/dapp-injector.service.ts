@@ -3,7 +3,10 @@ import { Store } from '@ngrx/store';
 
 import { Contract, Signer, Wallet } from 'ethers';
 import { providers } from 'ethers';
-import { ISTARTUP_CONFIG, startUpConfig } from '../dapp-demos/1-hello-world-contract/blockchain_wiring';
+import {
+  ISTARTUP_CONFIG,
+  startUpConfig,
+} from '../dapp-demos/1-hello-world-contract/blockchain_wiring';
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
 import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT } from './models';
 import { Web3Actions } from './store';
@@ -13,10 +16,9 @@ import { Web3Actions } from './store';
 })
 export class DappInjectorService {
   private _dollarExchange!: number;
-;
   config!: ISTARTUP_CONFIG;
   constructor(
-    @Inject('contractMetadata') public contractMetadata: ICONTRACT,
+    @Inject('debugContractMetadata') public contractMetadata: ICONTRACT,
     private store: Store
   ) {
     this.initChain();
@@ -48,8 +50,6 @@ export class DappInjectorService {
         'https://rpc.scaffoldeth.io:48544',
       ]);
 
-   
-
       const getUniswapContract = async (address: string) =>
         await new Contract(address, uniswapAbi, uniswapService);
       const contract = await getUniswapContract(uniswapUsdcAddress);
@@ -61,80 +61,127 @@ export class DappInjectorService {
     return this._dollarExchange;
   }
 
+  async runfunction(payload: {
+    contractKey: string;
+    method: string;
+    args: any;
+  }) {
+    let notification_message: ITRANSACTION_RESULT = {
+      success: false,
+    };
 
-  async runfunction(payload:{contractKey:string, method:string, args:any})  {
+    let transaction_details: ITRANSACTION_DETAILS = {
+      txhash: '',
+      bknr: 0,
+      from: '',
+      gas: '',
+      to: '',
+      value: '',
+    };
 
     ///// Check if method is available within abi
-    const abi_record_array = this.config.contracts[payload.contractKey].abi
-    .filter(fil=> fil.name == payload.method)
+    const abi_record_array = this.config.contracts[
+      payload.contractKey
+    ].abi.filter((fil) => fil.name == payload.method);
 
-    if (abi_record_array.length !== 1){
-      throw new Error("Methid not found");
+    if (abi_record_array.length !== 1) {
+      throw new Error('Method not found');
     }
 
-    const methodAbi = abi_record_array[0]
+    const methodAbi = abi_record_array[0];
     const stateMutability = methodAbi.stateMutability;
 
+    const isTransaction = stateMutability == 'view' || stateMutability == 'pure'? false : true;
+
     try {
+      switch ( isTransaction) {
+        case false:
+          console.log('i am viewing');
+          const resultFunction = await this.config.contracts[
+            payload.contractKey
+          ].contract[payload.method].apply(this, payload.args);
+          notification_message.success = true;
+          return   { msg:notification_message, payload:resultFunction};
 
-    switch (stateMutability) {
-      case 'view' || 'pure':
-        console.log('i am viewing')
-        const resultFunction = await  this.config.contracts[payload.contractKey]
-        .contract[payload.method].apply(this,payload.args)
-         return resultFunction
+        default:
+          console.log('i am gasing');
+          const result_tx = await this.config.contracts[
+            payload.contractKey
+          ].contract[payload.method].apply(this, payload.args);
+          const resultTransaction = await result_tx.wait();
+          transaction_details.txhash = resultTransaction.transactionHash;
+          transaction_details.from = resultTransaction.from;
+          transaction_details.to = resultTransaction.to;
+          transaction_details.gas = resultTransaction.gasUsed;
+          transaction_details.bknr = resultTransaction.blockNumber;
     
-      default:
-        console.log('i am gasing')
-        const result_tx = await this.config.contracts[payload.contractKey]
-        .contract[payload.method].apply(this, payload.args);
-        const resultTransaction = await result_tx.wait();
-        return resultTransaction
-  
+          result_tx.value == undefined
+            ? (transaction_details.value = '0')
+            : (transaction_details.value = result_tx.value.toString());
+            notification_message.success = true;
+            notification_message.success_result = transaction_details;
+          return   { msg:notification_message, payload:undefined};
+      }
+    } catch (e: any) {
+      console.log(e);
+      // Accounts for Metamask and default signer on all networks
+      let myMessage =
+        e.data && e.data.message
+          ? e.data.message
+          : e.error && JSON.parse(JSON.stringify(e.error)).body
+          ? JSON.parse(JSON.parse(JSON.stringify(e.error)).body).error.message
+          : e.data
+          ? e.data
+          : JSON.stringify(e);
+      if (!e.error && e.message) {
+        myMessage = e.message;
+      }
+
+      try {
+        let obj = JSON.parse(myMessage);
+        if (obj && obj.body) {
+          let errorObj = JSON.parse(obj.body);
+          if (errorObj && errorObj.error && errorObj.error.message) {
+            myMessage = errorObj.error.message;
+          }
+        }
+      } catch (e) {
+        //ignore
+      }
+      notification_message.error_message = myMessage;
+      return { msg: notification_message, payload: undefined };
     }
 
-      
-  } catch (error:any) {
-    console.log(typeof(error))
-    Object.keys(error['error']).forEach(key=> 
-      console.log(`${key}:${error[key]}`))
-    
-      console.log(JSON.parse(error['error']['body']))
-  }
-
-
   
   }
 
-  async doTransaction(tx:any,faucet?:boolean) {
- 
-    let notification_message:ITRANSACTION_RESULT = {
-      success: false
-    }
+  async doTransaction(tx: any, faucet?: boolean) {
+    let notification_message: ITRANSACTION_RESULT = {
+      success: false,
+    };
 
-    let transaction_details:ITRANSACTION_DETAILS = {
-      txhash: "",
+    let transaction_details: ITRANSACTION_DETAILS = {
+      txhash: '',
       bknr: 0,
-      from: "",
-      gas: "",
-      to: "",
-      value: "",
+      from: '',
+      gas: '',
+      to: '',
+      value: '',
     };
     try {
-
-       let tx_obj;
-       if (faucet == true) {
-        const localSigner = await this.config.providers['main'].getSigner()
+      let tx_obj;
+      if (faucet == true) {
+        const localSigner = await this.config.providers['main'].getSigner();
         tx_obj = await localSigner.sendTransaction(tx);
-       } else {
-       tx_obj = await this.config.signer!.sendTransaction(tx);
-       }
+      } else {
+        tx_obj = await this.config.signer!.sendTransaction(tx);
+      }
 
-
-       let tx_result = await tx_obj.wait();
-       const balance:any =await  this.config.signer?.getBalance()
-       this.store.dispatch(Web3Actions.updateWalletBalance({walletBalance:balance}))
-
+      let tx_result = await tx_obj.wait();
+      const balance: any = await this.config.signer?.getBalance();
+      this.store.dispatch(
+        Web3Actions.updateWalletBalance({ walletBalance: balance })
+      );
 
       const result = tx_result;
       transaction_details.txhash = result.transactionHash;
@@ -142,15 +189,13 @@ export class DappInjectorService {
       transaction_details.to = result.to;
       transaction_details.gas = result.gasUsed.toString();
       transaction_details.bknr = result.blockNumber;
-     
-      tx_obj.value == undefined
-        ? (transaction_details.value = "0")
-        : (transaction_details.value = tx_obj.value.toString());
-        notification_message.success = true;
-        notification_message.success_result = transaction_details;
-   
-    } catch (e:any) {
 
+      tx_obj.value == undefined
+        ? (transaction_details.value = '0')
+        : (transaction_details.value = tx_obj.value.toString());
+      notification_message.success = true;
+      notification_message.success_result = transaction_details;
+    } catch (e: any) {
       // console.log(e);
       // Accounts for Metamask and default signer on all networks
       let myMessage =
@@ -177,17 +222,13 @@ export class DappInjectorService {
         //ignore
       }
 
-    
-     notification_message.error_message = myMessage;
-    
+      notification_message.error_message = myMessage;
     }
 
-    return notification_message
-     }
+    return notification_message;
+  }
 
-
-
-  async dispatchInit(dispatchObject:{signer:Signer, provider:any}) {
+  async dispatchInit(dispatchObject: { signer: Signer; provider: any }) {
     this.config.signer = dispatchObject.signer;
     this.config.providers['main'] = dispatchObject.provider;
     const contract = await new Contract(
@@ -203,17 +244,14 @@ export class DappInjectorService {
       abi: this.contractMetadata.abi,
     };
 
-    await this.getDollarEther()
-    this.store.dispatch(Web3Actions.setDollarExhange({exchange:this._dollarExchange}))
+    await this.getDollarEther();
+    this.store.dispatch(
+      Web3Actions.setDollarExhange({ exchange: this._dollarExchange })
+    );
 
-
-   this.store.dispatch(Web3Actions.chainLoad({ status: false }));
-   this.store.dispatch(Web3Actions.chainBusy({ status: false }));
-
- 
-
+    this.store.dispatch(Web3Actions.chainLoad({ status: false }));
+    this.store.dispatch(Web3Actions.chainBusy({ status: false }));
   }
-
 
   async initChain() {
     this.config = startUpConfig;
@@ -224,28 +262,30 @@ export class DappInjectorService {
       if (!!(window as any).ethereum) {
         const metamaskProvider = new providers.Web3Provider(ethereum, 'any');
 
-        const addresses = await  metamaskProvider.listAccounts();
+        const addresses = await metamaskProvider.listAccounts();
         console.log(addresses);
         if (addresses.length > 0) {
-          const providerNetwork =  metamaskProvider && (await  metamaskProvider.getNetwork());
-          const metamaskSigner = await  metamaskProvider.getSigner();
-        
-          this.dispatchInit({signer:metamaskSigner, provider: metamaskProvider})
+          const providerNetwork =
+            metamaskProvider && (await metamaskProvider.getNetwork());
+          const metamaskSigner = await metamaskProvider.getSigner();
 
+          this.dispatchInit({
+            signer: metamaskSigner,
+            provider: metamaskProvider,
+          });
         } else {
         }
       } else {
       }
     } else {
-
-      const hardhatProvider = await  this.createProvider([])
+      const hardhatProvider = await this.createProvider([]);
 
       let wallet: Wallet;
-      
+
       switch (this.config.wallet) {
         case 'burner':
-
-          const currentPrivateKey = window.localStorage.getItem('metaPrivateKey');
+          const currentPrivateKey =
+            window.localStorage.getItem('metaPrivateKey');
           if (currentPrivateKey) {
             wallet = new Wallet(currentPrivateKey);
           } else {
@@ -254,18 +294,16 @@ export class DappInjectorService {
             window.localStorage.setItem('metaPrivateKey', privateKey);
           }
           break;
-      
+
         default:
-          let privKey = '' //environment.privKey
+          let privKey = ''; //environment.privKey
           wallet = new Wallet(privKey);
           break;
       }
 
       ////// local wallet
       const hardhatSigner = await wallet.connect(hardhatProvider);
-      this.dispatchInit({signer:hardhatSigner, provider: hardhatProvider})
-    
+      this.dispatchInit({ signer: hardhatSigner, provider: hardhatProvider });
     }
-
   }
 }
