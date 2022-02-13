@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { createIcon } from '@download/blockies';
-import { OnChainService } from 'src/app/dapp-demos/1-hello-world-contract/on-chain.service';
+import { DappInjectorService } from 'src/app/dapp-injector/dapp-injector.service';
 import { IBALANCE } from '../../../models/models';
 
 @Component({

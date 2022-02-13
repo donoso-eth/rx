@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 
 import { Contract, ethers, Signer } from 'ethers';
 
-import { OnChainService } from '../on-chain.service';
+import { DappInjectorService } from '../../../dapp-injector/dapp-injector.service';
 
 import {
   DialogService,
@@ -44,7 +44,7 @@ export class HelloWorldContractComponent implements OnInit {
   loading_contract: 'loading' | 'found' | 'error' = 'loading';
   blockchain_is_busy = true;
 
-  newWallet!: ethers.Wallet;
+  // newWallet!: ethers.Wallet;
 
   dollarExchange!: number;
   balanceDollar!: number;
@@ -53,37 +53,36 @@ export class HelloWorldContractComponent implements OnInit {
   constructor(
     private dialogService: DialogService,
     private notifierService: NotifierService,
-    private onChainService: OnChainService,
+    private dappInjectorService: DappInjectorService,
     private store: Store<Web3State>
   ) {}
 
   async onChainStuff() {
     try {
-      // await this.onChainService.init();
+      // await this.dappInjectorService.init();
 
       this.deployer_address =
-        await this.onChainService.config.signer!.getAddress();
+        await (await this.dappInjectorService.config.providers['main'].getSigner()).getAddress();
 
-      // this.onChainService.myProvider.blockEventSubscription.subscribe(
-      //   async (blockNr) => {
-      //     this.onChainService.helloWorldContract.refreshBalance();
-      //     this.onChainService.newWallet.refreshWalletBalance();
-      //     this.blockchain_is_busy = false;
-      //     const block =
-      //       await this.onChainService.myProvider.Provider.getBlockWithTransactions(
-      //         blockNr
-      //       );
-      //     this.blocks = [block].concat(this.blocks);
-      //   }
-      // );
+        this.dappInjectorService.config.providers['main'].on('block', async (log:any, event:any) => {
+  
+          this.refreshContractBalance();
+         
+          const block =
+            await  this.dappInjectorService.config.providers['main'].getBlockWithTransactions(
+              log
+            );
+          this.blocks = [block].concat(this.blocks);
+        }
+      );
 
-      // this.newWallet = await this.onChainService.newWallet.wallet;
+      // this.newWallet = await this.dappInjectorService.newWallet.wallet;
 
-      // this.onChainService.helloWorldContract.contractBalanceSubscription.subscribe(
+      // this.dappInjectorService.helloWorldContract.contractBalanceSubscription.subscribe(
       //   async (balance) => {
       //     const ehterbalance = convertWeiToEther(balance);
       //     const dollar =
-      //       ehterbalance * (await this.onChainService.getDollarEther());
+      //       ehterbalance * (await this.dappInjectorService.getDollarEther());
       //     this.contractBalance = {
       //       ether: displayEther(ehterbalance),
       //       usd: displayUsd(dollar),
@@ -91,11 +90,11 @@ export class HelloWorldContractComponent implements OnInit {
       //   }
       // );
 
-      // this.onChainService.newWallet.walletBalanceSubscription.subscribe(
+      // this.dappInjectorService.newWallet.walletBalanceSubscription.subscribe(
       //   async (balance) => {
       //     const ehterbalance = convertWeiToEther(balance);
       //     const dollar =
-      //       ehterbalance * (await this.onChainService.getDollarEther());
+      //       ehterbalance * (await this.dappInjectorService.getDollarEther());
       //     this.walletBalance = {
       //       ether: displayEther(ehterbalance),
       //       usd: displayUsd(dollar),
@@ -119,16 +118,27 @@ export class HelloWorldContractComponent implements OnInit {
     }
   }
 
+  async refreshContractBalance(){
+   const balance = await this.dappInjectorService.config.providers['main'].getBalance(this.contractHeader.address)
+             const ehterbalance = convertWeiToEther(balance);
+          const dollar =
+            ehterbalance * (await this.dappInjectorService.getDollarEther());
+          this.contractBalance = {
+            ether: displayEther(ehterbalance),
+            usd: displayUsd(dollar),
+          };
+  }
+
   async addBlock(blockNr: number) {
     const block =
-      await this.onChainService.myProvider.Provider.getBlockWithTransactions(
+       await  this.dappInjectorService.config.providers['main'].getBlockWithTransactions(
         blockNr
       );
     this.blocks = this.blocks.concat(block);
   }
 
   async displayGreeting() {
-    this.greeting = await this.onChainService.runfunction({
+    this.greeting = await this.dappInjectorService.runfunction({
       contractKey: 'myContract',
       method: 'greet',
       args: [],
@@ -143,22 +153,27 @@ export class HelloWorldContractComponent implements OnInit {
 
   async doFaucet() {
     this.blockchain_is_busy = true;
-    let amountInEther = '0.01';
+    let amountInEther = '0.1';
     // Create a transaction object
+
+
+
     let tx = {
-      to: this.newWallet.address,
+      to: await this.dappInjectorService.config.signer?.getAddress(),
       // Convert currency unit from ether to wei
       value: ethers.utils.parseEther(amountInEther),
     };
+
+
     // Send a transaction
     const transaction_result =
-      await this.onChainService.myProvider.doTransaction(tx);
+      await this.dappInjectorService.doTransaction(tx,true);
     this.blockchain_is_busy = false;
     await this.notifierService.showNotificationTransaction(transaction_result);
   }
 
   async openTransaction() {
-    console.log(await this.onChainService.getDollarEther());
+    console.log(await this.dappInjectorService.getDollarEther());
     this.blockchain_is_busy = true;
     const res = await this.dialogService.openDialog();
 
@@ -166,7 +181,7 @@ export class HelloWorldContractComponent implements OnInit {
       const usd = res.amount;
       const amountInEther = convertUSDtoEther(
         res.amount,
-        await this.onChainService.getDollarEther()
+        await this.dappInjectorService.getDollarEther()
       );
       const amountinWei = convertEtherToWei(amountInEther);
 
@@ -177,7 +192,7 @@ export class HelloWorldContractComponent implements OnInit {
       };
 
       const transaction_result =
-        await this.onChainService.newWallet.doTransaction(tx);
+        await this.dappInjectorService.doTransaction(tx);
       this.blockchain_is_busy = false;
       await this.notifierService.showNotificationTransaction(
         transaction_result
@@ -194,7 +209,7 @@ export class HelloWorldContractComponent implements OnInit {
       return;
     }
 
-    const transaction_result = await this.onChainService.runfunction({
+    const transaction_result = await this.dappInjectorService.runfunction({
       contractKey: 'myContract',
       method: 'setGreeting',
       args: [this.greeting_input],
@@ -209,7 +224,7 @@ export class HelloWorldContractComponent implements OnInit {
 
     
     // const transaction_result =
-    //   await this.onChainService.helloWorldContract.runTransactionFunction(
+    //   await this.dappInjectorService.helloWorldContract.runTransactionFunction(
     //     'setGreeting',
     //     [this.greeting_input]
     //   );
@@ -223,8 +238,8 @@ export class HelloWorldContractComponent implements OnInit {
   ngOnInit(): void {
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
       console.log(value);
-      this.myContract = this.onChainService.config.contracts['myContract'];
-      this.signer = this.onChainService.config.signer as Signer
+      this.myContract = this.dappInjectorService.config.contracts['myContract'];
+      this.signer = this.dappInjectorService.config.signer as Signer
       this.onChainStuff();
     });
 

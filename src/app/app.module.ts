@@ -8,9 +8,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { HelloWorldContractModule } from './dapp-demos/1-hello-world-contract/hello-world-contract.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DebugContractModule } from './dapp-demos/2-debug-contract/debug-contract.module';
-import { OnChainService } from './dapp-demos/1-hello-world-contract/on-chain.service';
-import { WalletdisplaytModule } from 'angular-web3';
+import { DappInjectorModule } from './dapp-injector/dapp-injector.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,9 +20,10 @@ import { WalletdisplaytModule } from 'angular-web3';
     StoreModule.forRoot({web3: we3ReducerFunction}),
     EffectsModule.forRoot([]),
     HelloWorldContractModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    DappInjectorModule
   ],
-  providers: [OnChainService ],
+  providers:  [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

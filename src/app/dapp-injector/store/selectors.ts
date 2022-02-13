@@ -31,6 +31,10 @@ const isNetworkBusy = createSelector(
   (state: Web3State) => state.isNetworkBusy
 );
 
+const selectWalletBalance= pipe(
+  select(selectState),
+  map(map=> map.walletBalance)
+);
 
 const selectDollarExchange= pipe(
   select(selectState),
@@ -42,5 +46,6 @@ export const web3Selectors = {
   isInitializing,
   selectChainReady,
   isNetworkBusy,
+  selectWalletBalance,
   selectDollarExchange
 };

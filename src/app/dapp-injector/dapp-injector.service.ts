@@ -1,26 +1,19 @@
 import { Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {
-  AngularContract,
-  AngularNetworkProvider,
-  AngularWallet,
-  ICONTRACT,
-  Web3Actions,
-} from 'angular-web3';
+
 import { Contract, Signer, Wallet } from 'ethers';
 import { providers } from 'ethers';
-import { environment } from 'src/environments/environment';
-import { ISTARTUP_CONFIG, startUpConfig } from './blockchain_wiring';
-import { uniswap_abi } from './uniswap_abi';
+import { ISTARTUP_CONFIG, startUpConfig } from '../dapp-demos/1-hello-world-contract/blockchain_wiring';
+import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
+import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT } from './models';
+import { Web3Actions } from './store';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OnChainService {
+export class DappInjectorService {
   private _dollarExchange!: number;
-  myProvider!: AngularNetworkProvider;
-  newWallet!: AngularWallet;
-  helloWorldContract!: AngularContract;
+;
   config!: ISTARTUP_CONFIG;
   constructor(
     @Inject('contractMetadata') public contractMetadata: ICONTRACT,
@@ -49,16 +42,16 @@ export class OnChainService {
       const uniswapUsdcAddress = '0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc';
       const uniswapAbi = uniswap_abi;
 
-      const uniswapService = new AngularNetworkProvider([
+      const uniswapService = await this.createProvider([
         'https://eth-mainnet.gateway.pokt.network/v1/lb/611156b4a585a20035148406',
         `https://eth-mainnet.alchemyapi.io/v2/oKxs-03sij-U_N0iOlrSsZFr29-IqbuF`,
         'https://rpc.scaffoldeth.io:48544',
       ]);
 
-      await uniswapService.init();
+   
 
       const getUniswapContract = async (address: string) =>
-        await new Contract(address, uniswapAbi, uniswapService.Provider);
+        await new Contract(address, uniswapAbi, uniswapService);
       const contract = await getUniswapContract(uniswapUsdcAddress);
       const reserves = await contract['getReserves']();
 
@@ -82,6 +75,7 @@ export class OnChainService {
     const methodAbi = abi_record_array[0]
     const stateMutability = methodAbi.stateMutability;
 
+    try {
 
     switch (stateMutability) {
       case 'view' || 'pure':
@@ -99,10 +93,98 @@ export class OnChainService {
   
     }
 
+      
+  } catch (error:any) {
+    console.log(typeof(error))
+    Object.keys(error['error']).forEach(key=> 
+      console.log(`${key}:${error[key]}`))
+    
+      console.log(JSON.parse(error['error']['body']))
+  }
 
 
   
   }
+
+  async doTransaction(tx:any,faucet?:boolean) {
+ 
+    let notification_message:ITRANSACTION_RESULT = {
+      success: false
+    }
+
+    let transaction_details:ITRANSACTION_DETAILS = {
+      txhash: "",
+      bknr: 0,
+      from: "",
+      gas: "",
+      to: "",
+      value: "",
+    };
+    try {
+
+       let tx_obj;
+       if (faucet == true) {
+        const localSigner = await this.config.providers['main'].getSigner()
+        tx_obj = await localSigner.sendTransaction(tx);
+       } else {
+       tx_obj = await this.config.signer!.sendTransaction(tx);
+       }
+
+
+       let tx_result = await tx_obj.wait();
+       const balance:any =await  this.config.signer?.getBalance()
+       this.store.dispatch(Web3Actions.updateWalletBalance({walletBalance:balance}))
+
+
+      const result = tx_result;
+      transaction_details.txhash = result.transactionHash;
+      transaction_details.from = result.from;
+      transaction_details.to = result.to;
+      transaction_details.gas = result.gasUsed.toString();
+      transaction_details.bknr = result.blockNumber;
+     
+      tx_obj.value == undefined
+        ? (transaction_details.value = "0")
+        : (transaction_details.value = tx_obj.value.toString());
+        notification_message.success = true;
+        notification_message.success_result = transaction_details;
+   
+    } catch (e:any) {
+
+      // console.log(e);
+      // Accounts for Metamask and default signer on all networks
+      let myMessage =
+        e.data && e.data.message
+          ? e.data.message
+          : e.error && JSON.parse(JSON.stringify(e.error)).body
+          ? JSON.parse(JSON.parse(JSON.stringify(e.error)).body).error.message
+          : e.data
+          ? e.data
+          : JSON.stringify(e);
+      if (!e.error && e.message) {
+        myMessage = e.message;
+      }
+
+      try {
+        let obj = JSON.parse(myMessage);
+        if (obj && obj.body) {
+          let errorObj = JSON.parse(obj.body);
+          if (errorObj && errorObj.error && errorObj.error.message) {
+            myMessage = errorObj.error.message;
+          }
+        }
+      } catch (e) {
+        //ignore
+      }
+
+    
+     notification_message.error_message = myMessage;
+    
+    }
+
+    return notification_message
+     }
+
 
 
   async dispatchInit(dispatchObject:{signer:Signer, provider:any}) {
@@ -121,10 +203,14 @@ export class OnChainService {
       abi: this.contractMetadata.abi,
     };
 
+    await this.getDollarEther()
+    this.store.dispatch(Web3Actions.setDollarExhange({exchange:this._dollarExchange}))
+
+
    this.store.dispatch(Web3Actions.chainLoad({ status: false }));
    this.store.dispatch(Web3Actions.chainBusy({ status: false }));
 
-  this.store.dispatch(Web3Actions.setDollarExhange({exchange:12}))
+ 
 
   }
 

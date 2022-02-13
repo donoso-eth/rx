@@ -4,7 +4,7 @@ import { HelloWorldContractComponent } from './hello-world-contract/hello-world-
 import { FormsModule } from '@angular/forms';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatButtonModule } from '@angular/material/button';
-import { OnChainService } from './on-chain.service';
+import { DappInjectorService } from '../../dapp-injector/dapp-injector.service';
 import { blockchain_imports, blockchain_providers } from './blockchain_wiring';
 import { WalletdisplaytModule } from 'angular-web3';
 

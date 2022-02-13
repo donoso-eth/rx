@@ -7,7 +7,7 @@ import { uniswap_abi } from './uniswap_abi';
 @Injectable({
   providedIn: 'root'
 })
-export class OnChainService {
+export class DappInjectorService {
   private _dollarExchange!: number;
   myProvider!: AngularNetworkProvider;
   newWallet!: AngularWallet;

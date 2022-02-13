@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Signer } from 'ethers';
 import { first, firstValueFrom } from 'rxjs';
 
-import { OnChainService } from  '../../../dapp-demos/1-hello-world-contract/on-chain.service';
+import { DappInjectorService } from  '../../dapp-injector.service';
 import { convertWeiToEther, displayEther, displayUsd } from '../../helpers';
 import { web3Selectors, Web3State } from '../../store';
 
@@ -22,7 +22,7 @@ export class WalletDisplayComponent implements AfterViewInit {
   dollarExhange!: number;
 
 
-  constructor(private renderer:Renderer2,   private store: Store<Web3State>) {
+  constructor(private renderer:Renderer2, private store: Store<Web3State>) {
 
    }
 
@@ -54,7 +54,7 @@ export class WalletDisplayComponent implements AfterViewInit {
   ngAfterViewInit(): void {
 
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
-      console.log(value);
+
     
       this.address_to_show = await this.signer.getAddress()
       const balance = await this.signer.getBalance();
@@ -75,7 +75,7 @@ export class WalletDisplayComponent implements AfterViewInit {
      this.convertWeitoDisplay(balance)
     });
 
-   
+    this.store.pipe(web3Selectors.selectWalletBalance).subscribe(balance=>   this.convertWeitoDisplay(balance))
 
     const icon = createIcon(this.blockiesOptions);
     
