@@ -261,7 +261,7 @@ export class DappInjectorService {
           const providerNetwork =
             metamaskProvider && (await metamaskProvider.getNetwork());
           const metamaskSigner = await metamaskProvider.getSigner();
-
+          console.log(providerNetwork)
           this.dispatchInit({
             signer: metamaskSigner,
             provider: metamaskProvider,

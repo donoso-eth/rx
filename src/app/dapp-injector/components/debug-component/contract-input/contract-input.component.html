@@ -19,25 +19,25 @@
         *ngFor="let myInput of abi_input.inputs" />
     </form>
     <div *ngIf="abi_input.stateMutability == 'payable'">
-      <mat-form-field floatLabel="always" style="
+      <div floatLabel="always" style="
           background: rgb(255 114 47 / 58%);
           margin: 5px 0;
           width: 100%;
         " class="example-full-width" appearance="fill">
-        <mat-label>Ether</mat-label>
+        <label>Ether</label>
         <input type="number" matInput [formControl]="payable_input" placeholder="0" class="example-right-align" />
         <span matSuffix>&nbsp;ETH</span>
-      </mat-form-field>
+    </div>
     </div>
 
-    <button (click)="runMyFunction()" *ngIf="
+    <button  (click)="runMyFunction()"  class="btn btn-primary" *ngIf="
         abi_input.inputs.length == 0 && abi_input.stateMutability == 'view';
-        else runFunction" mat-mini-fab color="accent" style="margin:auto">
-      <mat-icon aria-hidden="false" aria-label="Example home icon">refresh</mat-icon>
+        else runFunction" mini-fab color="accent" style="margin:auto">
+      <i class="material-icons">refresh</i>
     </button>
     <ng-template #runFunction>
-      <button (click)="runMyFunction()" mat-mini-fab color="accent">
-        <mat-icon aria-hidden="false" aria-label="Example home icon">play_arrow</mat-icon>
+      <button style="margin-top:10px" (click)="runMyFunction()" class="btn btn-primary">
+        <i class="material-icons">play_arrow</i> 
       </button>
     </ng-template>
     <div *ngIf="abi_input.stateMutability == 'view' || abi_input.stateMutability == 'pure'">

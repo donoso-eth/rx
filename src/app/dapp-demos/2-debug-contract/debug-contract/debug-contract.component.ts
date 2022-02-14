@@ -183,7 +183,8 @@ export class DebugContractComponent implements AfterViewInit {
       usd: displayUsd(dollar),
     };
   }
-  async onChainStuff() {
+
+    async onChainStuff() {
     try {
       this.deployer_address = await (
         await this.dappInjectorService.config.providers['main'].getSigner()
@@ -202,34 +203,34 @@ export class DebugContractComponent implements AfterViewInit {
       );
 
 
-      this.eventsAbiArray = this.contract_abi.filter(
-        (fil) => fil.type == 'event'
-      );
+      // this.eventsAbiArray = this.contract_abi.filter(
+      //   (fil) => fil.type == 'event'
+      // );
 
-      this.eventsAbiArray.forEach((val) => {
-        this.myContract.contract.on(val.name, (args:any) => {
-          let payload;
-          if (typeof args == 'object') {
-            payload = JSON.stringify(args);
-          } else {
-            payload = args.toString();
-          }
+      // this.eventsAbiArray.forEach((val) => {
+      //   this.myContract.contract.on(val.name, (args:any) => {
+      //     let payload;
+      //     if (typeof args == 'object') {
+      //       payload = JSON.stringify(args);
+      //     } else {
+      //       payload = args.toString();
+      //     }
 
-          this.events.unshift({
-            name: val.name,
-            payload,
-            timeStamp: new Date().toLocaleTimeString(),
-          });
-        });
-      });
+      //     this.events.unshift({
+      //       name: val.name,
+      //       payload,
+      //       timeStamp: new Date().toLocaleTimeString(),
+      //     });
+      //   });
+      // });
 
-      this.contract_abi
-        .filter((fil) => fil.type !== 'constructor')
-        .filter((fil) => fil.type !== 'event')
-        .filter((fil) => fil.type !== 'receive')
-        .forEach((abi) => {
-          this.add(abi);
-        });
+      // this.contract_abi
+      //   .filter((fil) => fil.type !== 'constructor')
+      //   .filter((fil) => fil.type !== 'event')
+      //   .filter((fil) => fil.type !== 'receive')
+      //   .forEach((abi) => {
+      //     this.add(abi);
+      //   });
 
       this.updateState();
     } catch (error) {
@@ -238,6 +239,8 @@ export class DebugContractComponent implements AfterViewInit {
     }
   }
 
+
+  
   async addBlock(blockNr: number) {
     const block = await this.dappInjectorService.config.providers[
       'main'
@@ -309,7 +312,7 @@ export class DebugContractComponent implements AfterViewInit {
         address: this.myContract.address,
         abi: this.myContract.abi
       };
-    //  this.onChainStuff();
+      this.onChainStuff();
     });
 
     this.store
