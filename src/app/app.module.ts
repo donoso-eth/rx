@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HelloWorldContractModule } from './dapp-demos/1-hello-world-contract/hello-world-contract.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DappInjectorModule } from './dapp-injector/dapp-injector.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DappInjectorModule } from './dapp-injector/dapp-injector.module';
     EffectsModule.forRoot([]),
     HelloWorldContractModule,
     BrowserAnimationsModule,
-    DappInjectorModule
+    DappInjectorModule,
+    NgbModule
   ],
   providers:  [],
   bootstrap: [AppComponent]
