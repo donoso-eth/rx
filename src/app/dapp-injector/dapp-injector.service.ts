@@ -3,12 +3,9 @@ import { Store } from '@ngrx/store';
 
 import { Contract, Signer, Wallet } from 'ethers';
 import { providers } from 'ethers';
-import {
-  ISTARTUP_CONFIG,
-  startUpConfig,
-} from '../dapp-demos/1-hello-world-contract/blockchain_wiring';
+
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
-import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT } from './models';
+import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT, startUpConfig, ISTARTUP_CONFIG } from './models';
 import { Web3Actions } from './store';
 
 @Injectable({

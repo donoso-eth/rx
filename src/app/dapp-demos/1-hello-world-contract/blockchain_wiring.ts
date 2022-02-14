@@ -5,25 +5,7 @@ import { ContractShowModule, AddressShowModule, BlockchainModule, DialogModule, 
 import {ICONTRACT } from 'angular-web3';
 import { Contract, Signer } from 'ethers';
 
-export interface ISTARTUP_CONFIG {
-    defaultNetwork: string,
-    wallet: 'metamask' | 'privKey' | 'burner',
-    blockSubscription:boolean,
-    providers: {[key:string]: any},
-    signer?: Signer 
-    contracts:{[key:string]: {name: string, address:string, contract:Contract, abi:Array<IABI_OBJECT>}}
-}
 
-
-
-export const startUpConfig:ISTARTUP_CONFIG = {
-    defaultNetwork: 'localhost',
-    wallet: 'burner',
-    blockSubscription: false,
-    providers:{},
-    contracts:{},
-
-}
 
 
 export const contractMetadata = new InjectionToken<ICONTRACT>('contractMetadata')

@@ -3,7 +3,7 @@
   [blockchain_is_busy]="blockchain_is_busy"
 >
   
-<debug-component *ngIf="onChainService.minimalContract !== undefined &&onChainService.minimalContract.metadata !== undefined "  [debugContract]="onChainService.minimalContract"></debug-component>
+<debug-component *ngIf="myContract && myContract.contract" [debugContract]="myContract" ></debug-component>
 
 <div
     style="max-width: 800px; width: 90vw; margin: auto"

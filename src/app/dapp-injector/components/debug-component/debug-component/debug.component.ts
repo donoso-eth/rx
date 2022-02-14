@@ -14,21 +14,7 @@ import {
 import { ContractInputComponent } from '../contract-input/contract-input.component';
 
 import { ContractFactory, ethers } from 'ethers';
-import {
 
-  BlockWithTransactions,
-  convertEtherToWei,
-  convertUSDtoEther,
-  convertWeiToEther,
-  DialogService,
-  displayEther,
-  displayUsd,
-  IABI_OBJECT,
-  IBALANCE,
-  ICONTRACT,
-  IINPUT_EVENT,
-  NotifierService,
-} from 'angular-web3';
 
 @Component({
   selector: 'debug-component',
@@ -70,7 +56,7 @@ export class DebugComponent implements AfterViewInit {
 
  
   }
-  @Input() public debugContract!: any;
+  @Input() public debugContract!: ICONTRACT_ANGULAR;
 
   @ViewChild('inputContainer', { read: ViewContainerRef })
   inputContainer!: ViewContainerRef;
@@ -167,7 +153,7 @@ export class DebugComponent implements AfterViewInit {
     try {
    
 
-  
+      console.log(this.contract_abi)
 
 
 
@@ -208,13 +194,13 @@ export class DebugComponent implements AfterViewInit {
   }
 
 ngOnchanges(): void {
-  this.contract_abi = this.debugContract?.metadata?.abi 
+  this.contract_abi = this.debugContract.abi 
   console.log(this.contract_abi);
 }
 
 
   ngAfterViewInit(): void {
-    this.contract_abi = this.debugContract.metadata.abi 
+    this.contract_abi = this.debugContract.abi 
     this.onChainStuff();
   }
 }

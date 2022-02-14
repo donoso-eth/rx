@@ -28,6 +28,7 @@ import {
   NotifierService,
   web3Selectors,
   Web3State,
+  ICONTRACT_ANGULAR 
 } from 'angular-web3';
 import { Store } from '@ngrx/store';
 
@@ -61,12 +62,7 @@ export class DebugContractComponent implements AfterViewInit {
 
   dollarExchange!: number;
   balanceDollar!: number;
-  myContract!: {
-    name: string;
-    address: string;
-    contract: ethers.Contract;
-    abi: IABI_OBJECT[];
-  };
+  myContract!: ICONTRACT_ANGULAR ;
   constructor(
     private cd: ChangeDetectorRef,
     private dialogService: DialogService,

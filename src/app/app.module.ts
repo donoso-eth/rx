@@ -23,8 +23,7 @@ import { DebugContractModule } from './dapp-demos/2-debug-contract/debug-contrac
     EffectsModule.forRoot([]),
     DebugContractModule,
     BrowserAnimationsModule,
-    DappInjectorModule,
-    NgbModule
+    DappInjectorModule
   ],
   providers:  [],
   bootstrap: [AppComponent]

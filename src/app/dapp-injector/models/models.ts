@@ -1,4 +1,28 @@
-import { Contract, ethers } from "ethers";
+import { Contract, ethers, Signer } from "ethers";
+
+export interface ISTARTUP_CONFIG {
+  defaultNetwork: string,
+  wallet: 'metamask' | 'privKey' | 'burner',
+  blockSubscription:boolean,
+  providers: {[key:string]: any},
+  signer?: Signer 
+  contracts:{[key:string]: ICONTRACT_ANGULAR }
+}
+
+
+export interface ICONTRACT_ANGULAR {
+  name: string, address:string, contract:Contract, abi:Array<IABI_OBJECT>
+}
+
+
+export const startUpConfig:ISTARTUP_CONFIG = {
+  defaultNetwork: 'localhost',
+  wallet: 'burner',
+  blockSubscription: false,
+  providers:{},
+  contracts:{},
+
+}
 
 export interface IABI_OBJECT {
   inputs: Array<{ internalType: string; name: string; type: string }>;

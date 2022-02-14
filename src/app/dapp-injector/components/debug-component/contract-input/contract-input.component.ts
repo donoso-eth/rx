@@ -7,7 +7,7 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IABI_OBJECT, IINPUT_EVENT } from 'angularonchain';
+import { IABI_OBJECT, IINPUT_EVENT } from 'angular-web3';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class ContractInputComponent implements OnInit {
 
   runMyFunction() {
 
-    const myValue =this.abi_input.inputs.map(map=> this.input_form.controls[map.name].value)  
+    const myValue =this.abi_input.inputs.map( (map:any)=> this.input_form.controls[map.name].value)  
     
     const options:IINPUT_EVENT = {
       function: this.abi_input.name as string, 
