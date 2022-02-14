@@ -14,7 +14,9 @@ export  class AngularContract implements OnDestroy {
   public contractBalanceSubscription: ReplaySubject<any>=
     new ReplaySubject(1);
 
-  constructor(@Inject('metadata') public metadata: ICONTRACT) {}
+  constructor(@Inject('metadata') public metadata: ICONTRACT) {
+
+  }
 
   async init(provider:any, wallet:Wallet) {
     this._provider = provider;
@@ -26,15 +28,15 @@ export  class AngularContract implements OnDestroy {
     return this._contract;
   }
 
-  get Abi() {
+  get abi() {
     return this.metadata.abi;
   }
 
-  get Adress() {
+  get adress() {
     return this.metadata.address;
   }
 
-  get Contract() {
+  get contract() {
     if (this._contract == undefined) {
       throw new Error('Contract not yet initialized');
     }
@@ -42,7 +44,7 @@ export  class AngularContract implements OnDestroy {
   }
 
   async refreshBalance() {
-    this._balance = await this._provider.getBalance(this.Adress);
+    this._balance = await this._provider.getBalance(this.adress);
     this.contractBalanceSubscription.next(this._balance);
     return this._balance;
   }
@@ -133,7 +135,7 @@ export  class AngularContract implements OnDestroy {
 
  async  runFunction(functionName: string, args: any, state?: string) {
     if (state == undefined) {
-      const myFunction_filter = this.Abi.filter(
+      const myFunction_filter = this.abi.filter(
         (fil:any) => fil.name == functionName
       );
       if (myFunction_filter.length !== 1) {
