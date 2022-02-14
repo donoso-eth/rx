@@ -5,6 +5,7 @@ import { Contract, Signer, Wallet } from 'ethers';
 import { providers } from 'ethers';
 
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
+import { AngularContract } from './classes/contract';
 import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT, startUpConfig, ISTARTUP_CONFIG } from './models';
 import { Web3Actions } from './store';
 
@@ -228,18 +229,12 @@ export class DappInjectorService {
   async dispatchInit(dispatchObject: { signer: Signer; provider: any }) {
     this.config.signer = dispatchObject.signer;
     this.config.providers['main'] = dispatchObject.provider;
-    const contract = await new Contract(
-      this.contractMetadata.address,
-      this.contractMetadata.abi,
-      this.config.signer
-    );
 
-    this.config.contracts['myContract'] = {
-      contract,
-      name: 'mycontract',
-      address: this.contractMetadata.address,
-      abi: this.contractMetadata.abi,
-    };
+    const contract = new AngularContract({metadata:this.contractMetadata, provider:dispatchObject.provider, signer:dispatchObject.signer})
+
+
+
+    this.config.contracts['myContract'] = contract
 
     await this.getDollarEther();
     this.store.dispatch(
@@ -248,6 +243,7 @@ export class DappInjectorService {
 
     this.store.dispatch(Web3Actions.chainLoad({ status: false }));
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
+  
   }
 
   async initChain() {

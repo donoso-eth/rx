@@ -25,4 +25,4 @@ import { WalletDisplayComponent } from './wallet-display.component';
   exports: [WalletDisplayComponent
   ]
 })
-export class WalletdisplaytModule { }
+export class WalletDisplayModule { }

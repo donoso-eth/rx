@@ -11,7 +11,7 @@ import { DebugContractComponent } from './debug-contract/debug-contract.componen
 import {MatTabsModule} from '@angular/material/tabs';
 import { blockchain_imports, blockchain_providers } from './blockchain_wiring';
 
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [DebugContractComponent,
     ContractInputComponent,
@@ -26,6 +26,7 @@ import { blockchain_imports, blockchain_providers } from './blockchain_wiring';
     MatFormFieldModule,
     MatIconModule,
     MatTabsModule,
+   NgbModule,
     blockchain_imports
 
   ],

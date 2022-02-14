@@ -19,7 +19,7 @@ export class AppComponent {
 
     this.store.dispatch(Web3Actions.chainMount)
 
-   // this.store.pipe(select(web3Selectors.isInitializing)).subscribe((x:any)=> console.log(x))
+    // this.store.pipe(select(web3Selectors.isNetworkBusy)).subscribe((x:any)=> this.b)
  
    
   }

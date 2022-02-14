@@ -1,4 +1,5 @@
-import { Component, Input, OnChanges, OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import { Signer } from 'ethers';
 
 @Component({
   selector: 'onchain-home',
@@ -15,6 +16,10 @@ export class HomeComponent implements OnInit, OnChanges {
 
   @Input() public blockchain_is_busy = false;
   
+  @Input() public signer!:Signer;
+  @Output() public doFaucetEvent = new EventEmitter();
+  @Output() public openTransactionEvent = new EventEmitter();
+
   ngOnInit(): void {
   }
 

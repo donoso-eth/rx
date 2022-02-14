@@ -105,6 +105,7 @@ export class HelloWorldContractComponent implements OnInit {
       this.contractHeader = {
         name: this.myContract.name,
         address: this.myContract.address,
+        abi: this.myContract.abi
       };
 
       //  this.dappInjectorService.blockchain_busy.subscribe(loading=> {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
+import { WalletDisplayModule } from '../wallet-display/wallet-display.module';
 
 
 
@@ -9,10 +10,12 @@ import { HomeComponent } from './home/home.component';
     HomeComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    WalletDisplayModule
   ],
   exports: [
-    HomeComponent
+    HomeComponent,
+
   ]
 })
 export class HomeModule { }

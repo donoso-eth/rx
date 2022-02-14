@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy, Inject } from '@angular/core';
-import {  providers, Wallet, Contract } from 'ethers';
+import { JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
+import {  providers, Wallet, Contract, Signer } from 'ethers';
 import { ReplaySubject } from 'rxjs';
 import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT } from '../models/models';
 
@@ -14,26 +15,33 @@ export  class AngularContract implements OnDestroy {
   public contractBalanceSubscription: ReplaySubject<any>=
     new ReplaySubject(1);
 
-  constructor(@Inject('metadata') public metadata: ICONTRACT) {
+  constructor(@Inject('metadata') public contrat_init: { metadata: ICONTRACT, provider:JsonRpcProvider | Web3Provider, signer:Signer}) {
+    
+    this.init()
 
   }
 
-  async init(provider:any, wallet:Wallet) {
-    this._provider = provider;
+  async init() {
+    this._provider = this.contrat_init.provider;
     this._contract = await new Contract(
-      this.metadata.address,
-      this.metadata.abi,
-      wallet
+      this.contrat_init.metadata.address,
+      this.contrat_init.metadata.abi,
+      this.contrat_init.signer
     );
     return this._contract;
   }
 
-  get abi() {
-    return this.metadata.abi;
+  get name() {
+    return this.contrat_init.metadata.name;
   }
 
-  get adress() {
-    return this.metadata.address;
+
+  get abi() {
+    return this.contrat_init.metadata.abi;
+  }
+
+  get address() {
+    return this.contrat_init.metadata.address;
   }
 
   get contract() {
@@ -44,7 +52,7 @@ export  class AngularContract implements OnDestroy {
   }
 
   async refreshBalance() {
-    this._balance = await this._provider.getBalance(this.adress);
+    this._balance = await this._provider.getBalance(this.address);
     this.contractBalanceSubscription.next(this._balance);
     return this._balance;
   }

@@ -8,7 +8,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
 import { HelloWorldContractModule } from './dapp-demos/1-hello-world-contract/hello-world-contract.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DappInjectorModule, we3ReducerFunction } from 'angular-web3';
+import { DappInjectorModule,  we3ReducerFunction } from 'angular-web3';
 import { DebugContractModule } from './dapp-demos/2-debug-contract/debug-contract.module';
 
 

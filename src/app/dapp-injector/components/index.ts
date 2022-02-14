@@ -5,4 +5,5 @@ export * from './blockchain';
 export * from './dialog';
 export * from './notifier';
 export * from './wallet-display';
-export * from './debug-component'
+export * from './debug-component';
+export * from './loading'

@@ -1,4 +1,5 @@
 import { Contract, ethers, Signer } from "ethers";
+import { AngularContract } from "../classes/contract";
 
 export interface ISTARTUP_CONFIG {
   defaultNetwork: string,
@@ -6,13 +7,13 @@ export interface ISTARTUP_CONFIG {
   blockSubscription:boolean,
   providers: {[key:string]: any},
   signer?: Signer 
-  contracts:{[key:string]: ICONTRACT_ANGULAR }
+  contracts:{[key:string]: AngularContract}
 }
 
 
-export interface ICONTRACT_ANGULAR {
-  name: string, address:string, contract:Contract, abi:Array<IABI_OBJECT>
-}
+// export interface ICONTRACT_ANGULAR {
+//   name: string, address:string, contract:Contract, abi:Array<IABI_OBJECT>
+// }
 
 
 export const startUpConfig:ISTARTUP_CONFIG = {
@@ -45,9 +46,9 @@ export interface IMETA_CONTRACT {
 }
 
 export interface ICONTRACT {
-  address:string,
-  name:string
-  abi?:any;
+  address:string;
+  name:string;
+  abi:Array<IABI_OBJECT>;
 }
 
 export interface IBALANCE {
