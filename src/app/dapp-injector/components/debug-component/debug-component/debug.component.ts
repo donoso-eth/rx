@@ -16,6 +16,11 @@ import { ContractInputComponent } from '../contract-input/contract-input.compone
 import { ContractFactory, ethers } from 'ethers';
 
 
+import { BlockWithTransactions, IABI_OBJECT, IBALANCE, ICONTRACT, ICONTRACT_ANGULAR, IINPUT_EVENT } from  '../../../models';
+import { NotifierService } from '../../notifier/notifier.service';
+import { DialogService } from '../../dialog/dialog.service';
+
+
 @Component({
   selector: 'debug-component',
   templateUrl: './debug.component.html',
@@ -100,53 +105,53 @@ export class DebugComponent implements AfterViewInit {
     componentRef.instance.initUi(abi);
     this.componentInstances.push(componentRef.instance);
 
-    componentRef.instance.newEventFunction.subscribe(
-      async (value: IINPUT_EVENT) => {
-        const myResult = await this.debugContract.runFunction(
-          value.function,
-          value.args,
-          value.state
-        );
+    // componentRef.instance.newEventFunction.subscribe(
+    //   async (value: IINPUT_EVENT) => {
+    //     const myResult = await this.debugContract.runFunction(
+    //       value.function,
+    //       value.args,
+    //       value.state
+    //     );
    
-        if (myResult.msg.success == false) {
-          await this.notifierService.showNotificationTransaction(myResult.msg);
-        }
+    //     if (myResult.msg.success == false) {
+    //       await this.notifierService.showNotificationTransaction(myResult.msg);
+    //     }
 
-        if (myResult.msg.success_result !== undefined) {
-          await this.notifierService.showNotificationTransaction(myResult.msg);
-        }
+    //     if (myResult.msg.success_result !== undefined) {
+    //       await this.notifierService.showNotificationTransaction(myResult.msg);
+    //     }
 
-        if (value.function !== 'pure' && value.function !== 'view') {
-          this.updateState();
-        }
+    //     if (value.function !== 'pure' && value.function !== 'view') {
+    //       this.updateState();
+    //     }
 
-        if (value.outputs.length > 0) {
-          if (myResult.msg.success == true) {
-            componentRef.instance.refreshUi(myResult.payload);
-          } else {
-            await this.notifierService.showNotificationTransaction(
-              myResult.msg
-            );
-          }
-        }
-      }
-    );
+    //     if (value.outputs.length > 0) {
+    //       if (myResult.msg.success == true) {
+    //         componentRef.instance.refreshUi(myResult.payload);
+    //       } else {
+    //         await this.notifierService.showNotificationTransaction(
+    //           myResult.msg
+    //         );
+    //       }
+    //     }
+    //   }
+    // );
   }
 
   async updateState() {
-    for (const stateCompo of this.stateInstances) {
-      const result =
-        await this.debugContract.runContractFunction(
-          stateCompo.abi_input.name as string,
-          {}
-        );
+    // for (const stateCompo of this.stateInstances) {
+    //   const result =
+    //     await this.debugContract.runContractFunction(
+    //       stateCompo.abi_input.name as string,
+    //       {}
+    //     );
 
-      if (result.msg.success == true) {
-        stateCompo.refreshUi(result.payload);
-      } else {
-        this.notifierService.showNotificationTransaction(result.msg);
-      }
-    }
+    //   if (result.msg.success == true) {
+    //     stateCompo.refreshUi(result.payload);
+    //   } else {
+    //     this.notifierService.showNotificationTransaction(result.msg);
+    //   }
+    // }
   }
 
   async onChainStuff() {

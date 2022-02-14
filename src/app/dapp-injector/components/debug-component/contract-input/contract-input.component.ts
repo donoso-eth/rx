@@ -7,7 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IABI_OBJECT, IINPUT_EVENT } from 'angular-web3';
+import { IABI_OBJECT, IINPUT_EVENT } from '../../../models';
+
 
 
 @Component({
