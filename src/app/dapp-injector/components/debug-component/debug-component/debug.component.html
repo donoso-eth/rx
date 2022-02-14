@@ -1,25 +1,4 @@
-<onchain-home *ngIf="!!contractHeader"
-  [contractName]="contractHeader.name"
-  [blockchain_is_busy]="blockchain_is_busy"
->
-  
-<debug-component *ngIf="onChainService.minimalContract !== undefined &&onChainService.minimalContract.metadata !== undefined "  [debugContract]="onChainService.minimalContract"></debug-component>
 
-<div
-    style="max-width: 800px; width: 90vw; margin: auto"
-    
-  >
-    <mat-tab-group mat-align-tabs="center">
-      <mat-tab label="Smart Contract">
-        <p style="text-align: center; font-size: 20px">
-          <address-show
-            (doFaucetEvent)="doFaucet()"
-            (openTransactionEvent)="openTransaction()"
-            *ngIf="!!newWallet"
-            [balance]="walletBalance"
-            [address_to_show]="newWallet.address"
-          ></address-show>
-        </p>
         <div
           style="
             text-align: center;
@@ -29,13 +8,7 @@
             padding-bottom: 10px;
           "
         >
-          <p style="text-align: center; font-size: 20px">
-            <contract-show
-              *ngIf="!!contractHeader"
-              [balance]="contractBalance"
-              [contract]="contractHeader"
-            ></contract-show>
-          </p>
+
           <div
             *ngIf="eventsAbiArray.length > 0"
             style="
@@ -91,16 +64,5 @@
             <ng-container #inputContainer></ng-container>
           </div>
         </div>
-      </mat-tab>
-      <mat-tab style="height: fit-content" label="BlockChain">
-        <blockchain
-          *ngIf="blocks !== undefined"
-          [blocks]="blocks"
-          (addBlock)="addBlock($event)"
-        ></blockchain>
-        <br />
-        <br />
-      </mat-tab>
-    </mat-tab-group>
-  </div>
-  </onchain-home>
+
+

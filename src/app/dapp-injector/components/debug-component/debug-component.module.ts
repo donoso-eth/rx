@@ -7,13 +7,13 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 
-import { DebugContractComponent } from './debug-contract/debug-contract.component';
+
 import {MatTabsModule} from '@angular/material/tabs';
-import { blockchain_imports, blockchain_providers } from './blockchain_wiring';
+import { DebugComponent } from './debug-component/debug.component';
 
 
 @NgModule({
-  declarations: [DebugContractComponent,
+  declarations: [DebugComponent,
     ContractInputComponent,
  
   ],
@@ -26,12 +26,9 @@ import { blockchain_imports, blockchain_providers } from './blockchain_wiring';
     MatFormFieldModule,
     MatIconModule,
     MatTabsModule,
-    blockchain_imports
 
   ],
-  providers:[...blockchain_providers],
-  exports: [
-    DebugContractComponent
+    exports: [DebugComponent
   ]
 })
-export class DebugContractModule { }
+export class DebugComponentModule { }
