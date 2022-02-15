@@ -57,7 +57,7 @@ export class DebugContractComponent implements AfterViewInit {
   events: Array<any> = [];
   eventsAbiArray: Array<any> = [];
 
-  //blockchain_is_busy = true;
+
 
   newWallet!: ethers.Wallet;
 
@@ -71,7 +71,7 @@ export class DebugContractComponent implements AfterViewInit {
     private notifierService: NotifierService,
     private dappInjectorService: DappInjectorService,
     private store: Store<Web3State>,
-    private componentFactoryResolver: ComponentFactoryResolver
+
   ) {}
 
   @ViewChild('inputContainer', { read: ViewContainerRef })
