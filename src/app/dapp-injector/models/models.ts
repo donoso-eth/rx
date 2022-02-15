@@ -3,7 +3,7 @@ import { AngularContract } from "../classes/contract";
 
 export interface ISTARTUP_CONFIG {
   defaultNetwork: string,
-  wallet: 'metamask' | 'privKey' | 'burner',
+  wallet: 'wallet' | 'privKey' | 'burner',
   blockSubscription:boolean,
   providers: {[key:string]: any},
   signer?: Signer 

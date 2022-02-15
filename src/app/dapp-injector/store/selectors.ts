@@ -16,14 +16,14 @@ const selectState  = createSelector(
   (state: Web3State) => state
 );
 
-const isInitializing = createSelector(
+const chainStatus = createSelector(
   selectWeb3State,
-  (state: Web3State) => state.initializing
+  (state: Web3State) => state.chainStatus
 );
 
 const selectChainReady = pipe(
-  select(isInitializing),
-  filter((val) => val == false)
+  select(chainStatus),
+  filter((val) => val == 'success')
 );
 
 const isNetworkBusy = createSelector(
@@ -43,7 +43,7 @@ const selectDollarExchange= pipe(
 );
 
 export const web3Selectors = {
-  isInitializing,
+  chainStatus,
   selectChainReady,
   isNetworkBusy,
   selectWalletBalance,

@@ -1,5 +1,5 @@
 export interface Web3State {
-    initializing:boolean;
+    chainStatus: 'loading' | 'fail' | 'success';
     isNetworkBusy:boolean;
     walletBalance:number;
     etherToDollar:number;

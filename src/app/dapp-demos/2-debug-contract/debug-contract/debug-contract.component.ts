@@ -83,93 +83,7 @@ export class DebugContractComponent implements AfterViewInit {
   @ViewChild('payableContainer', { read: ViewContainerRef })
   payableContainer!: ViewContainerRef;
 
-  add(abi: IABI_OBJECT): void {
-    this.cd.detectChanges();
-    // create the compoxnent factory
-    const dynamicComponentFactory =
-      this.componentFactoryResolver.resolveComponentFactory(
-        ContractInputComponent
-      );
 
-    let componentRef: any;
-    // add the component to the view
-
-    if (
-      abi.stateMutability == 'view' &&
-      abi.inputs.length == 0 &&
-      abi.outputs.length == 1
-    ) {
-      componentRef = this.stateContainer.createComponent(
-        dynamicComponentFactory
-      );
-      this.stateInstances.push(componentRef.instance);
-    } else if (abi.stateMutability == 'payable') {
-      componentRef = this.payableContainer.createComponent(
-        dynamicComponentFactory
-      );
-    } else {
-      componentRef = this.inputContainer.createComponent(
-        dynamicComponentFactory
-      );
-    }
-    componentRef.instance.initUi(abi);
-    this.componentInstances.push(componentRef.instance);
-
-    componentRef.instance.newEventFunction.subscribe(
-      async (value: IINPUT_EVENT) => {
-        const myResult = await this.dappInjectorService.runfunction({
-          method: value.function,
-          contractKey: 'myContract',
-          args: value.args,
-        });
-
-        if (myResult.msg.success == false) {
-          await this.notifierService.showNotificationTransaction(myResult.msg);
-        }
-
-        if (myResult.msg.success_result !== undefined) {
-          await this.notifierService.showNotificationTransaction(myResult.msg);
-        }
-
-        if (value.function !== 'pure' && value.function !== 'view') {
-          this.updateState();
-        }
-
-        if (value.outputs.length > 0) {
-          if (myResult.msg.success == true) {
-            console.log(myResult.payload)
-            componentRef.instance.refreshUi(myResult.payload.toString());
-          } else {
-            await this.notifierService.showNotificationTransaction(
-              myResult.msg
-            );
-          }
-        }
-      }
-    );
-  }
-
-  async updateState() {
-    console.log(this.stateInstances)
-    for (const stateCompo of this.stateInstances) {
-      const method = stateCompo.abi_input.name as string;
-      console.log(method)
-      const result = await this.dappInjectorService.runfunction({
-        method,
-        contractKey: 'myContract',
-        args: [],
-      });
-
-      console.log(result.payload);
-      // const outputArray = result.payload.map( (map:any)=> map.toString())
-
-      if (result.msg.success == true) {
-        stateCompo.refreshUi(result.payload);
-      } else {
-        this.notifierService.showNotificationTransaction(result.msg);
-      }
-    }
-  }
 
   async refreshContractBalance() {
     const balance = await this.dappInjectorService.config.providers[
@@ -202,37 +116,6 @@ export class DebugContractComponent implements AfterViewInit {
         }
       );
 
-
-      // this.eventsAbiArray = this.contract_abi.filter(
-      //   (fil) => fil.type == 'event'
-      // );
-
-      // this.eventsAbiArray.forEach((val) => {
-      //   this.myContract.contract.on(val.name, (args:any) => {
-      //     let payload;
-      //     if (typeof args == 'object') {
-      //       payload = JSON.stringify(args);
-      //     } else {
-      //       payload = args.toString();
-      //     }
-
-      //     this.events.unshift({
-      //       name: val.name,
-      //       payload,
-      //       timeStamp: new Date().toLocaleTimeString(),
-      //     });
-      //   });
-      // });
-
-      // this.contract_abi
-      //   .filter((fil) => fil.type !== 'constructor')
-      //   .filter((fil) => fil.type !== 'event')
-      //   .filter((fil) => fil.type !== 'receive')
-      //   .forEach((abi) => {
-      //     this.add(abi);
-      //   });
-
-      this.updateState();
     } catch (error) {
       console.log(error);
       this.loading_contract = 'error';
@@ -301,10 +184,11 @@ export class DebugContractComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
-      console.log(value);
+
+      console.log(' should not be in contract debug')
+
       this.myContract = this.dappInjectorService.config.contracts['myContract'];
       this.contract_abi = this.myContract.abi;
-      console.log(this.contract_abi);
       this.signer = this.dappInjectorService.config.signer as Signer;
       
       this.contractHeader = {
@@ -312,6 +196,7 @@ export class DebugContractComponent implements AfterViewInit {
         address: this.myContract.address,
         abi: this.myContract.abi
       };
+
       this.onChainStuff();
     });
 

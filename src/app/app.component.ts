@@ -17,7 +17,7 @@ export class AppComponent {
    */
   constructor(private store:Store<Web3State>) {
 
-    this.store.dispatch(Web3Actions.chainMount)
+    this.store.dispatch(Web3Actions.chainStatus({status:'loading'}))
 
     // this.store.pipe(select(web3Selectors.isNetworkBusy)).subscribe((x:any)=> this.b)
  

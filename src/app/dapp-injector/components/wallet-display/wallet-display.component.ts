@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef,  EventEmitter,  Input,  Output,  Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef,  EventEmitter,  Input,  Output,  Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { createIcon } from '@download/blockies';
 import { Store } from '@ngrx/store';
 import { Signer } from 'ethers';
@@ -22,7 +22,9 @@ export class WalletDisplayComponent implements AfterViewInit {
   dollarExhange!: number;
 
 
-  constructor(private renderer:Renderer2, private store: Store<Web3State>) {
+  constructor(
+    private cd: ChangeDetectorRef,
+    private renderer:Renderer2, private store: Store<Web3State>) {
 
    }
 
@@ -73,9 +75,12 @@ export class WalletDisplayComponent implements AfterViewInit {
       }
      // await this.myWallet.refreshWalletBalance()
      this.convertWeitoDisplay(balance)
+     
     });
 
-    this.store.pipe(web3Selectors.selectWalletBalance).subscribe(balance=>   this.convertWeitoDisplay(balance))
+    this.store.pipe(web3Selectors.selectWalletBalance).subscribe(balance=>   { 
+      this.convertWeitoDisplay(balance)
+      this.cd.detectChanges();})
 
     const icon = createIcon(this.blockiesOptions);
     

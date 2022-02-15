@@ -6,6 +6,7 @@ import { providers } from 'ethers';
 
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
 import { AngularContract } from './classes/contract';
+import { NotifierService } from './components/notifier/notifier.service';
 import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT, startUpConfig, ISTARTUP_CONFIG } from './models';
 import { Web3Actions } from './store';
 
@@ -17,7 +18,8 @@ export class DappInjectorService {
   config!: ISTARTUP_CONFIG;
   constructor(
     @Inject('debugContractMetadata') public contractMetadata: ICONTRACT,
-    private store: Store
+    private store: Store,
+    private notifierService: NotifierService,
   ) {
     this.initChain();
   }
@@ -241,7 +243,7 @@ export class DappInjectorService {
       Web3Actions.setDollarExhange({ exchange: this._dollarExchange })
     );
 
-    this.store.dispatch(Web3Actions.chainLoad({ status: false }));
+    this.store.dispatch(Web3Actions.chainStatus({ status: 'success'}));
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
   
   }
@@ -249,7 +251,7 @@ export class DappInjectorService {
   async initChain() {
     this.config = startUpConfig;
 
-    if (this.config.wallet == 'metamask') {
+    if (this.config.wallet == 'wallet') {
       console.log('Check if 🦊 injected provider');
       let ethereum = (window as any).ethereum;
       if (!!(window as any).ethereum) {
@@ -271,6 +273,9 @@ export class DappInjectorService {
       } else {
       }
     } else {
+
+      try {
+ 
       const hardhatProvider = await this.createProvider([]);
 
       let wallet: Wallet;
@@ -296,7 +301,20 @@ export class DappInjectorService {
 
       ////// local wallet
       const hardhatSigner = await wallet.connect(hardhatProvider);
-      this.dispatchInit({ signer: hardhatSigner, provider: hardhatProvider });
+      console.log(hardhatSigner)
+      const providerNetwork =
+      hardhatProvider && (await hardhatProvider).getNetwork();
+    
+    await providerNetwork
+    this.dispatchInit({ signer: hardhatSigner, provider: hardhatProvider });    
+    } catch (error:any) {
+      console.log(error)   
+
+      this.notifierService.showNotificationTransaction({success:false,error_message:error.toString()})
+      this.store.dispatch(Web3Actions.chainStatus({status:'fail'})) 
+      this.store.dispatch(Web3Actions.chainBusy({status: false}))
+    }
+
     }
   }
 }
