@@ -70,6 +70,7 @@ const config: HardhatUserConfig = {
   paths: {
     artifacts: '../src/assets/artifacts'
   },
+  defaultNetwork:'hardhat',
   networks: {
     hardhat: {
       chainId: 1337,

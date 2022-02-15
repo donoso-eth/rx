@@ -7,7 +7,8 @@ import { providers } from 'ethers';
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
 import { AngularContract } from './classes/contract';
 import { NotifierService } from './components/notifier/notifier.service';
-import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT, startUpConfig, ISTARTUP_CONFIG } from './models';
+import { startUpConfig } from './dapp-injector.module';
+import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT,ISTARTUP_CONFIG } from './models';
 import { Web3Actions } from './store';
 
 @Injectable({
@@ -301,11 +302,11 @@ export class DappInjectorService {
 
       ////// local wallet
       const hardhatSigner = await wallet.connect(hardhatProvider);
-      console.log(hardhatSigner)
-      const providerNetwork =
-      hardhatProvider && (await hardhatProvider).getNetwork();
+   
+      const providerNetwork = await hardhatProvider.getNetwork();
+      
+      console.log(providerNetwork)
     
-    await providerNetwork
     this.dispatchInit({ signer: hardhatSigner, provider: hardhatProvider });    
     } catch (error:any) {
       console.log(error)   

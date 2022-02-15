@@ -3,6 +3,7 @@ import { AngularContract } from "../classes/contract";
 
 export interface ISTARTUP_CONFIG {
   defaultNetwork: string,
+  connectedNetwork:string,
   wallet: 'wallet' | 'privKey' | 'burner',
   blockSubscription:boolean,
   providers: {[key:string]: any},
@@ -16,14 +17,6 @@ export interface ISTARTUP_CONFIG {
 // }
 
 
-export const startUpConfig:ISTARTUP_CONFIG = {
-  defaultNetwork: 'localhost',
-  wallet: 'burner',
-  blockSubscription: false,
-  providers:{},
-  contracts:{},
-
-}
 
 export interface IABI_OBJECT {
   inputs: Array<{ internalType: string; name: string; type: string }>;
