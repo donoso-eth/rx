@@ -27,7 +27,7 @@ export const NETWORKS:{[key:string]: INETWORK} = {
     color: "#666666",
     chainId: 1337,
     blockExplorer: "",
-    rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":8545",
+    rpcUrl: "http://" + (window ? window.location.hostname : "localhost") + ":8545",
   },
   mainnet: {
     name: "mainnet",
@@ -131,14 +131,14 @@ export const NETWORKS:{[key:string]: INETWORK} = {
     color: "#f01a37",
     chainId: 31337,
     blockExplorer: "",
-    rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":9545",
+    rpcUrl: "http://" + (window ? window.location.hostname : "localhost") + ":9545",
   },
   localOptimism: {
     name: "localOptimism",
     color: "#f01a37",
     chainId: 420,
     blockExplorer: "",
-    rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":8545",
+    rpcUrl: "http://" + (window ? window.location.hostname : "localhost") + ":8545",
     gasPrice: 0,
   },
   kovanOptimism: {

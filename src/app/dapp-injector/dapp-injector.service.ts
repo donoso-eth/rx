@@ -7,6 +7,7 @@ import { providers } from 'ethers';
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
 import { AngularContract } from './classes/contract';
 import { NotifierService } from './components/notifier/notifier.service';
+import { NETWORKS } from './constants/constants';
 import { startUpConfig } from './dapp-injector.module';
 import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT,ISTARTUP_CONFIG } from './models';
 import { Web3Actions } from './store';
@@ -277,8 +278,8 @@ export class DappInjectorService {
 
       try {
  
-      const hardhatProvider = await this.createProvider([]);
 
+       const hardhatProvider = await this.createProvider([NETWORKS[this.config.defaultNetwork].rpcUrl]);
       let wallet: Wallet;
 
       switch (this.config.wallet) {
