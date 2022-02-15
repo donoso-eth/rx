@@ -1,8 +1,10 @@
 export interface Web3State {
     chainStatus: NETWORK_STAATUS;
     isNetworkBusy:boolean;
+    signerNetwork:string;
     walletBalance:number;
     etherToDollar:number;
+
     
   }
 

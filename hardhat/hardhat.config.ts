@@ -10,13 +10,8 @@ import { readFileSync, writeFileSync } from "fs";
 
 const INFURA_ID = '212d29e8e6d145d78a350b2971f326be' //process.env["INFURA_ID"]
 const MORALIS_ID = '6e874b0f13667e6fd8583112'; //process.env["MORALIS_ID"] 
-
-`https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/mainnet`
-`https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/ropsten`
-`https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/goerli`
-
-
-const ALCHEMY_ID_MUMBAI=  'https://polygon-mumbai.g.alchemy.com/v2/P2lEQkjFdNjdN0M_mpZKB8r3fAa2M0vT' //process.env["ALCHEMY_ID_MUMBAI"]
+const ALCHEMY_ID_MUMBAI= 'P2lEQkjFdNjdN0M_mpZKB8r3fAa2M0vT';  //process.env["ALCHEMY_ID_MUMBAI"]
+ 
 
 dotenv.config();
 
@@ -123,18 +118,16 @@ const config: HardhatUserConfig = {
     },
     kovan: {
       url: `https://kovan.infura.io/v3/${INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
-    
-      //   `https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/kovan`
-      
+      // `https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/kovan`
+ 
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
-      
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/mainnet", // <---- YOUR MORALIS ID! (not limited to infura)
-        
+      //`https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/mainnet`
+         
       gasPrice: mainnetGwei*1000000000,
       accounts: {
         mnemonic: mnemonic(),
@@ -142,19 +135,15 @@ const config: HardhatUserConfig = {
     },
     ropsten: {
       url: `https://ropsten.infura.io/v3/${INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
-      
-      //      url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/ropsten",// <---- YOUR MORALIS ID! (not limited to infura)
-      
+      // `https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/ropsten`    
       accounts: {
         mnemonic: mnemonic(),
       },
     },
     goerli: {
       url: `https://goerli.infura.io/v3/${INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
-      
-      //url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXXXXXXX/eth/goerli", // <---- YOUR MORALIS ID! (not limited to infura)
-      
-      accounts: {
+      // `https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/goerli`
+        accounts: {
         mnemonic: mnemonic(),
       },
     },
@@ -174,6 +163,7 @@ const config: HardhatUserConfig = {
     },     
     mumbai: {
       url: `https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/polygon/mumbai`,// <---- YOUR MORALIS ID! (not limited to infura)
+     // `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_ID_MUMBAI}`
       gasPrice: 1000000000,
       accounts: {
         mnemonic: mnemonic(),
@@ -187,10 +177,10 @@ const config: HardhatUserConfig = {
         mnemonic: mnemonic(),
       },
     },
-    ropsten: {
-      url: process.env["ROPSTEN_URL"] || "",
-      accounts: process.env["PRIVATE_KEY"] !== undefined ? [process.env["PRIVATE_KEY"]] : [],
-    },
+    // ropsten: {
+    //   url: process.env["ROPSTEN_URL"] || "",
+    //   accounts: process.env["PRIVATE_KEY"] !== undefined ? [process.env["PRIVATE_KEY"]] : [],
+    // },
   },
   gasReporter: {
     enabled: process.env["REPORT_GAS"] !== undefined,

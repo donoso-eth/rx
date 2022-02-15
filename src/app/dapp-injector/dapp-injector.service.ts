@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import { Store } from '@ngrx/store';
 
 import { Contract, Signer, Wallet } from 'ethers';
@@ -7,7 +8,7 @@ import { providers } from 'ethers';
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
 import { AngularContract } from './classes/contract';
 import { NotifierService } from './components/notifier/notifier.service';
-import { NETWORKS } from './constants/constants';
+import { netWorkById, NETWORKS } from './constants/constants';
 import { startUpConfig } from './dapp-injector.module';
 import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT,ISTARTUP_CONFIG } from './models';
 import { Web3Actions } from './store';
@@ -230,7 +231,7 @@ export class DappInjectorService {
     return notification_message;
   }
 
-  async dispatchInit(dispatchObject: { signer: Signer; provider: any }) {
+  async dispatchInit(dispatchObject: { signer: Signer; provider: JsonRpcProvider | Web3Provider}) {
     this.config.signer = dispatchObject.signer;
     this.config.providers['main'] = dispatchObject.provider;
 
@@ -244,6 +245,14 @@ export class DappInjectorService {
     this.store.dispatch(
       Web3Actions.setDollarExhange({ exchange: this._dollarExchange })
     );
+
+    const providerNetwork = await dispatchObject.provider.getNetwork();
+
+    const networkString =  netWorkById(providerNetwork.chainId)?.name as string
+    console.log(networkString)
+    this.store.dispatch(Web3Actions.setSignerNetwork({network:networkString}))
+    
+
 
     this.store.dispatch(Web3Actions.chainStatus({ status: 'success'}));
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
@@ -303,10 +312,9 @@ export class DappInjectorService {
 
       ////// local wallet
       const hardhatSigner = await wallet.connect(hardhatProvider);
-   
-      const providerNetwork = await hardhatProvider.getNetwork();
       
-      console.log(providerNetwork)
+ 
+
     
     this.dispatchInit({ signer: hardhatSigner, provider: hardhatProvider });    
     } catch (error:any) {

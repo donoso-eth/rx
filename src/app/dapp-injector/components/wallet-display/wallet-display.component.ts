@@ -20,6 +20,7 @@ export class WalletDisplayComponent implements AfterViewInit {
   address_to_show!:string;
   balance!: { ether: any; usd: any; };
   dollarExhange!: number;
+  network!: string;
 
 
   constructor(
@@ -56,8 +57,6 @@ export class WalletDisplayComponent implements AfterViewInit {
   ngAfterViewInit(): void {
 
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
-
-    
       this.address_to_show = await this.signer.getAddress()
       const balance = await this.signer.getBalance();
 
@@ -81,6 +80,8 @@ export class WalletDisplayComponent implements AfterViewInit {
     this.store.pipe(web3Selectors.selectWalletBalance).subscribe(balance=>   { 
       this.convertWeitoDisplay(balance)
       this.cd.detectChanges();})
+
+    this.store.select(web3Selectors.selectSignerNetwork).subscribe(network=> this.network = network)
 
     const icon = createIcon(this.blockiesOptions);
     
