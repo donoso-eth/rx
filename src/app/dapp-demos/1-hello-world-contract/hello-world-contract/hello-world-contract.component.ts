@@ -22,6 +22,7 @@ import {
 } from 'angular-web3';
 import { Store } from '@ngrx/store';
 import { first, firstValueFrom } from 'rxjs';
+import { AngularContract } from 'src/app/dapp-injector/classes/contract';
 
 @Component({
   selector: 'hello-world-contract',
@@ -48,7 +49,7 @@ export class HelloWorldContractComponent implements OnInit {
 
   dollarExchange!: number;
   balanceDollar!: number;
-  myContract!: IMETA_CONTRACT;
+  myContract!: AngularContract;
   signer!: Signer ;
   constructor(
     private dialogService: DialogService,
@@ -105,7 +106,8 @@ export class HelloWorldContractComponent implements OnInit {
       this.contractHeader = {
         name: this.myContract.name,
         address: this.myContract.address,
-        abi: this.myContract.abi
+        abi: this.myContract.abi,
+        network: this.myContract.network
       };
 
       //  this.dappInjectorService.blockchain_busy.subscribe(loading=> {

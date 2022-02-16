@@ -1,5 +1,6 @@
 import { Contract, ethers, Signer } from "ethers";
 import { AngularContract } from "../classes/contract";
+import { INETWORK } from "../constants/constants";
 
 export interface ISTARTUP_CONFIG {
   defaultNetwork: string,
@@ -38,10 +39,18 @@ export interface IMETA_CONTRACT {
   contract:Contract
 }
 
-export interface ICONTRACT {
+export interface ICONTRACT_METADATA {
   address:string;
   name:string;
   abi:Array<IABI_OBJECT>;
+  network_id: number;
+}
+
+export interface ICONTRACT{
+  address:string;
+  name:string;
+  abi:Array<IABI_OBJECT>;
+  network: INETWORK;
 }
 
 export interface IBALANCE {

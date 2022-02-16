@@ -92,7 +92,7 @@ const config: HardhatUserConfig = {
   paths: {
     artifacts: '../src/assets/artifacts'
   },
-  defaultNetwork:'hardhat',
+  defaultNetwork:'rinkeby',
   // if you want to deploy to a testnet, mainnet, or xdai, you will need to configure:
   // 1. An Infura key (or similar)
   // 2. A private key for the deployer
@@ -119,10 +119,10 @@ const config: HardhatUserConfig = {
     kovan: {
       url: `https://kovan.infura.io/v3/${INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)
       // `https://speedy-nodes-nyc.moralis.io/${MORALIS_ID}/eth/kovan`
- 
-      accounts: {
-        mnemonic: mnemonic(),
-      },
+      accounts: process.env["PRIVATE_KEY"] !== undefined ? [process.env["PRIVATE_KEY"]] : [],
+      // accounts: {
+      //   mnemonic: mnemonic(),
+      // },
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${INFURA_ID}`, // <---- YOUR INFURA ID! (or it won't work)

@@ -194,7 +194,8 @@ export class DebugContractComponent implements AfterViewInit {
       this.contractHeader = {
         name: this.myContract.name,
         address: this.myContract.address,
-        abi: this.myContract.abi
+        abi: this.myContract.abi,
+        network:this.myContract.network
       };
 
       this.onChainStuff();

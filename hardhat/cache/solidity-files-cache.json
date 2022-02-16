@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\hardhat\\contracts\\1-HelloWorldContract.sol": {
-      "lastModificationDate": 1644609615117,
-      "contentHash": "45cf5da2c7fb4d4d1677774da2bab46b",
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/hardhat/contracts/1-HelloWorldContract.sol": {
+      "lastModificationDate": 1644747557774,
+      "contentHash": "f8351b1d666774a5f32478877e229013",
       "sourceName": "contracts/1-HelloWorldContract.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -38,8 +38,8 @@
         "HelloWorldContract"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\hardhat\\console.sol": {
-      "lastModificationDate": 1644473020784,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1644492175880,
       "contentHash": "cc4777addd464ea56fa35b1c45df0591",
       "sourceName": "hardhat/console.sol",
       "solcConfig": {
@@ -73,9 +73,9 @@
         "console"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\hardhat\\contracts\\2-DebugContract.sol": {
-      "lastModificationDate": 1644599945150,
-      "contentHash": "717eaa2b413d5a423702ad47d017e488",
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/hardhat/contracts/2-DebugContract.sol": {
+      "lastModificationDate": 1644747557774,
+      "contentHash": "b5de13e7eae90d9cce28d50752e7dc02",
       "sourceName": "contracts/2-DebugContract.sol",
       "solcConfig": {
         "version": "0.8.4",

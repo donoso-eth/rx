@@ -10,7 +10,7 @@ import { AngularContract } from './classes/contract';
 import { NotifierService } from './components/notifier/notifier.service';
 import { netWorkById, NETWORKS } from './constants/constants';
 import { startUpConfig } from './dapp-injector.module';
-import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT,ISTARTUP_CONFIG } from './models';
+import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT,ISTARTUP_CONFIG, ICONTRACT_METADATA } from './models';
 import { Web3Actions } from './store';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class DappInjectorService {
   private _dollarExchange!: number;
   config!: ISTARTUP_CONFIG;
   constructor(
-    @Inject('debugContractMetadata') public contractMetadata: ICONTRACT,
+    @Inject('debugContractMetadata') public contractMetadata: ICONTRACT_METADATA,
     private store: Store,
     private notifierService: NotifierService,
   ) {
