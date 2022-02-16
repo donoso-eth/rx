@@ -24,6 +24,7 @@ export class DappInjectorService {
     private store: Store,
     private notifierService: NotifierService,
   ) {
+    //this.store
     this.initChain();
   }
 
