@@ -1,5 +1,5 @@
 export interface Web3State {
-    chainStatus: NETWORK_STAATUS;
+    chainStatus: NETWORK_STATUS;
     isNetworkBusy:boolean;
     signerNetwork:string;
     walletBalance:number;
@@ -8,4 +8,4 @@ export interface Web3State {
     
   }
 
-  export type NETWORK_STAATUS = 'loading' | 'fail' | 'success';
+  export type NETWORK_STATUS = 'loading' | 'fail' | 'wallet-not-connected' | 'ethereum-not-connected' | 'success';

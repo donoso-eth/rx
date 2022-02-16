@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Signer } from 'ethers';
-import { NETWORK_STAATUS, Web3State, web3Selectors } from '../../../store';
+import { NETWORK_STATUS, Web3State, web3Selectors } from '../../../store';
+import { angular_web3, no_network } from './images';
 
 
 @Component({
@@ -10,7 +11,9 @@ import { NETWORK_STAATUS, Web3State, web3Selectors } from '../../../store';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnChanges {
-  public blockchain_status:NETWORK_STAATUS = 'loading'
+  public blockchain_status:NETWORK_STATUS = 'loading'
+  public no_network = no_network;
+  public angular_web3 = angular_web3
   constructor(    private store: Store<Web3State>,) { }
   ngOnChanges(): void {
   }

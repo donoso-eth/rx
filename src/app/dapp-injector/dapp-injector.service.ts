@@ -280,8 +280,12 @@ export class DappInjectorService {
             provider: metamaskProvider,
           });
         } else {
+          this.store.dispatch(Web3Actions.chainStatus({status:'ethereum-not-connected'}))
+          this.store.dispatch(Web3Actions.chainBusy({status: false}))
         }
       } else {
+        this.store.dispatch(Web3Actions.chainStatus({status:'wallet-not-connected'}))
+        this.store.dispatch(Web3Actions.chainBusy({status: false}))
       }
     } else {
 

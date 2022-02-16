@@ -7,3 +7,4 @@ export * from './notifier';
 export * from './wallet-display';
 export * from './debug-component';
 export * from './loading'
+export * from './web3-modal'

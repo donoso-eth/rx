@@ -37,8 +37,11 @@ export class AngularContract implements OnDestroy {
       this.contrat_init.metadata.abi,
       this.contrat_init.signer
     );
-    if (!this.contrat_init.metadata.network_id) {
+    console.log(this.contrat_init.metadata.network_id)
+    if (this.contrat_init.metadata.network_id !== undefined) {
+      console.log(this.contrat_init.metadata.network_id)
       const network = netWorkById(this.contrat_init.metadata.network_id as number);
+      console.log(network)
       this._network = network;
     } else {
       this._network = noNetwork;
