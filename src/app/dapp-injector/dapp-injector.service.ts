@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { JsonRpcProvider, Web3Provider } from '@ethersproject/providers';
 import { Store } from '@ngrx/store';
@@ -8,6 +9,7 @@ import { providers } from 'ethers';
 import { uniswap_abi } from '../dapp-demos/1-hello-world-contract/uniswap_abi';
 import { AngularContract } from './classes/contract';
 import { NotifierService } from './components/notifier/notifier.service';
+import { Web3ModalComponent } from './components/web3-modal/web3-modal/web3-modal.component';
 import { netWorkById, NETWORKS } from './constants/constants';
 import { startUpConfig } from './dapp-injector.module';
 import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT,ISTARTUP_CONFIG, ICONTRACT_METADATA } from './models';
@@ -20,6 +22,7 @@ export class DappInjectorService {
   private _dollarExchange!: number;
   config!: ISTARTUP_CONFIG;
   constructor(
+    @Inject(DOCUMENT) private readonly document: any,
     @Inject('debugContractMetadata') public contractMetadata: ICONTRACT_METADATA,
     private store: Store,
     private notifierService: NotifierService,
@@ -283,10 +286,15 @@ export class DappInjectorService {
         } else {
           this.store.dispatch(Web3Actions.chainStatus({status:'ethereum-not-connected'}))
           this.store.dispatch(Web3Actions.chainBusy({status: false}))
+          console.log('ethereum no connecte')
+          const wallet = new Web3ModalComponent(this.document)
+          await wallet.loadWallets()
+          await wallet.connectWallet()
         }
       } else {
         this.store.dispatch(Web3Actions.chainStatus({status:'wallet-not-connected'}))
         this.store.dispatch(Web3Actions.chainBusy({status: false}))
+        console.log('wallet no connecte')
       }
     } else {
 

@@ -101,6 +101,8 @@ export class Web3ModalComponent implements AfterViewInit {
 
   createWeb3Modal() {
     try {
+      console.log(window.Web3Modal)
+
       this.web3Modal = new window.Web3Modal.default({
         network: 'mainnet', // Optional. If using WalletConnect on xDai, change network to "xdai" and add RPC info below for xDai chain.
         cacheProvider: true, // optional
@@ -119,36 +121,36 @@ export class Web3ModalComponent implements AfterViewInit {
               },
             },
           },
-          portis: {
-            display: {
-              logo: 'https://user-images.githubusercontent.com/9419140/128913641-d025bc0c-e059-42de-a57b-422f196867ce.png',
-              name: 'Portis',
-              description: 'Connect to Portis App',
-            },
-            package: window.Portis,
-            options: {
-              id: 'e658b463-60fd-46ee-b6f2-f8b694eaafec',
-            },
-          },
-          fortmatic: {
-            package: window.Fortmatic, // required
-            options: {
-              key: 'pk_live_CF5B363940938ED5', // required
-            },
-          },
-          torus: {
-            package: window.Torus,
-            options: {
-              networkParams: {
-                host: 'https://localhost:8545', // optional
-                chainId: 1337, // optional
-                networkId: 1337, // optional
-              },
-              config: {
-                buildEnv: 'development', // optional
-              },
-            },
-          },
+          // portis: {
+          //   display: {
+          //     logo: 'https://user-images.githubusercontent.com/9419140/128913641-d025bc0c-e059-42de-a57b-422f196867ce.png',
+          //     name: 'Portis',
+          //     description: 'Connect to Portis App',
+          //   },
+          //   package: window.Portis,
+          //   options: {
+          //     id: 'e658b463-60fd-46ee-b6f2-f8b694eaafec',
+          //   },
+          // },
+          // fortmatic: {
+          //   package: window.Fortmatic, // required
+          //   options: {
+          //     key: 'pk_live_CF5B363940938ED5', // required
+          //   },
+          // },
+          // torus: {
+          //   package: window.Torus,
+          //   options: {
+          //     networkParams: {
+          //       host: 'https://localhost:8545', // optional
+          //       chainId: 1337, // optional
+          //       networkId: 1337, // optional
+          //     },
+          //     config: {
+          //       buildEnv: 'development', // optional
+          //     },
+          //   },
+          // },
           // 'custom-walletlink': {
           //   display: {
           //     logo: 'https://play-lh.googleusercontent.com/PjoJoG27miSglVBXoXrxBSLveV6e3EeBPpNY55aiUUBM9Q1RCETKCOqdOkX2ZydqVf0',
@@ -161,9 +163,9 @@ export class Web3ModalComponent implements AfterViewInit {
           //     return provider;
           //   },
           // },
-          authereum: {
-            package: window.Authereum, // required
-          },
+          // authereum: {
+          //   package: window.Authereum, // required
+          // },
         },
       });
     } catch (error) {
@@ -215,6 +217,7 @@ export class Web3ModalComponent implements AfterViewInit {
       return;
     }
     console.log('hoal');
+    console.log(this.web3Modal)
     const provider = await this.web3Modal.connect();
     console.log(provider);
     this.onConnect.emit(provider);

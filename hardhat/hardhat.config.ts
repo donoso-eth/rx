@@ -70,7 +70,7 @@ task(
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
-const defaultNetwork = "localhost";
+
 
 const mainnetGwei = 21;
 
@@ -86,13 +86,13 @@ const mnemonic = () => {
   }
   return "";
 }
-
+const defaultNetwork = "localhost";
 const config: HardhatUserConfig = {
   solidity: "0.8.4",
   paths: {
     artifacts: '../src/assets/artifacts'
   },
-  defaultNetwork:'rinkeby',
+  defaultNetwork,
   // if you want to deploy to a testnet, mainnet, or xdai, you will need to configure:
   // 1. An Infura key (or similar)
   // 2. A private key for the deployer
