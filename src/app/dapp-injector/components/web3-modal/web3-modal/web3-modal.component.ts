@@ -6,8 +6,7 @@ import {
   EventEmitter,
   Inject,
   Input,
-  NgZone,
-  OnInit,
+
   Output,
 } from '@angular/core';
 import { providers } from 'ethers';
@@ -48,8 +47,8 @@ export enum WALLET_PROVIDERS {
   styleUrls: ['./web3-modal.component.css'],
 })
 export class Web3ModalComponent implements AfterViewInit {
-  status = { connected: false, network: 'noop' };
-  busy = true;
+
+  ready = false;
   options: { [key: string]: { loaded: boolean; scriptTag: string } } = {
     WalletConnectProvider: {
       loaded: false,
@@ -88,15 +87,19 @@ export class Web3ModalComponent implements AfterViewInit {
   web3Modal: any;
   public providerArray: Array<string> = [];
 
-  constructor(@Inject(DOCUMENT) private readonly document: any) {
-    console.log(this.network);
+  constructor(@Inject('payload') public payload: { document:any, provider?:any }) {
+    
+    if (this.payload.provider !== undefined) {
+      this.createProviderHooks(payload.provider)
+    }
+
   }
 
   @Output() onConnect: EventEmitter<any> = new EventEmitter();
   @Output() onDisConnect: EventEmitter<void> = new EventEmitter();
 
 
-  @Input() public network!: string;
+ 
   @Input() public injectionProvider!: any;
 
   createWeb3Modal() {
@@ -221,33 +224,35 @@ export class Web3ModalComponent implements AfterViewInit {
     const provider = await this.web3Modal.connect();
     console.log(provider);
     this.onConnect.emit(provider);
-    location.reload();
     this.createProviderHooks(provider);
   }
 
   createProviderHooks(provider: any) {
+
+  console.log(' I am doing hooks')
+    console.log(provider)
     // Subscribe to accounts change
     provider.on('accountsChanged', (accounts: string[]) => {
-      console.log(accounts);
-      location.reload();
+      this.onConnect.emit(provider);
+    
     });
 
     // Subscribe to chainId change
     provider.on('chainChanged', (chainId: number) => {
-      location.reload();
+      this.onConnect.emit(provider);
     });
 
     // Subscribe to provider connection
     provider.on('connect', (info: { chainId: number }) => {
       console.log(info);
       this.onConnect.emit(provider);
-      location.reload();
+     // location.reload();
     });
 
     // Subscribe to provider disconnection
     provider.on('disconnect', (error: { code: number; message: string }) => {
       console.log(error);
-      location.reload();
+      this.onDisConnect.emit(provider);
     });
   }
 
@@ -280,7 +285,7 @@ export class Web3ModalComponent implements AfterViewInit {
     const myPromises: any[] = [];
     for (const mapy of myArray) {
       const myPromise = new Promise<void>((resolve, reject) => {
-        let script = this.document.createElement('script');
+        let script = this.payload.document.createElement('script');
         try {
           script.type = 'text/javascript';
           script.async = true;
@@ -290,7 +295,7 @@ export class Web3ModalComponent implements AfterViewInit {
             console.log(mapy.name);
             resolve();
           };
-          this.document.body.appendChild(script);
+          this.payload.document.body.appendChild(script);
         } catch (error) {
           reject();
           console.log(error);
@@ -302,23 +307,22 @@ export class Web3ModalComponent implements AfterViewInit {
       .then(() => {
         setTimeout(async () => {
           // this.Web3Modal = window.Web3Modal.default;on
-          this.busy = false;
-          const provider = new providers.Web3Provider((window as any).ethereum);
-          const addresses = await provider.listAccounts();
-          // it doesn't create metamask popup
-          if (addresses.length) {
-            console.log('ok');
-            console.log(await provider.getNetwork());
-            this.status.network = (await provider.getNetwork()).name;
-            this.createProviderHooks((window as any).ethereum);
-            console.log(this.status.network);
-            this.status.connected = true;
-          }
+          this.ready = true;
+          // const provider = new providers.Web3Provider((window as any).ethereum);
+          // const addresses = await provider.listAccounts();
+          // // it doesn't create metamask popup
+          // if (addresses.length) {
+          //   console.log('ok');
+  
+       
+          //   this.createProviderHooks((window as any).ethereum);
+    
+          // }
 
-          // permission already granted so request account address from metamask
-          else {
-            console.log('okmoooopd');
-          }
+          // // permission already granted so request account address from metamask
+          // else {
+          //   console.log('okmoooopd');
+          // }
         }, 100);
       })
       .catch((error) => console.log(error));

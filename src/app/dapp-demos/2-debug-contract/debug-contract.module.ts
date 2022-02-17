@@ -12,6 +12,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { blockchain_imports, blockchain_providers } from './blockchain_wiring';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { Web3ModalModule } from 'angular-web3';
 @NgModule({
   declarations: [DebugContractComponent,
     ContractInputComponent,
@@ -26,6 +27,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatFormFieldModule,
     MatIconModule,
     MatTabsModule,
+    Web3ModalModule,
    NgbModule,
     blockchain_imports
 

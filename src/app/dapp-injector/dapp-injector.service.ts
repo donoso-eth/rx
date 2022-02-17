@@ -21,6 +21,7 @@ import { Web3Actions } from './store';
 export class DappInjectorService {
   private _dollarExchange!: number;
   config!: ISTARTUP_CONFIG;
+  webModal!: Web3ModalComponent;
   constructor(
     @Inject(DOCUMENT) private readonly document: any,
     @Inject('debugContractMetadata') public contractMetadata: ICONTRACT_METADATA,
@@ -256,11 +257,15 @@ export class DappInjectorService {
     console.log(networkString)
     this.store.dispatch(Web3Actions.setSignerNetwork({network:networkString}))
     
-
+      console.log('success')
 
     this.store.dispatch(Web3Actions.chainStatus({ status: 'success'}));
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
   
+  }
+
+  async launchWenmodal(){
+    await this.webModal.connectWallet()
   }
 
   async initChain() {
@@ -283,21 +288,37 @@ export class DappInjectorService {
             signer: metamaskSigner,
             provider: metamaskProvider,
           });
+
+          this.webModal = new Web3ModalComponent({document:this.document,provider:ethereum})
+
         } else {
           this.store.dispatch(Web3Actions.chainStatus({status:'ethereum-not-connected'}))
           this.store.dispatch(Web3Actions.chainBusy({status: false}))
           console.log('ethereum no connecte')
-          const wallet = new Web3ModalComponent(this.document)
-          await wallet.loadWallets()
-          await wallet.connectWallet()
+          this.webModal = new Web3ModalComponent({document:this.document})
+         
+   
+        
         }
       } else {
+        this.webModal = new Web3ModalComponent({document:this.document})
         this.store.dispatch(Web3Actions.chainStatus({status:'wallet-not-connected'}))
         this.store.dispatch(Web3Actions.chainBusy({status: false}))
         console.log('wallet no connecte')
       }
+      await this.webModal.loadWallets()
+      this.webModal.onConnect.subscribe(async walletConnectProvider=> {
+  
+        walletConnectProvider
+        const webModalProvider = new providers.Web3Provider(walletConnectProvider)
+       const webModalSigner = await webModalProvider.getSigner();
+        this.dispatchInit({
+          signer: webModalSigner,
+          provider: webModalProvider
+        });
+      })
+    
     } else {
-
       try {
  
 

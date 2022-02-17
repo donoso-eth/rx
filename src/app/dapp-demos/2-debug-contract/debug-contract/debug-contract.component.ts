@@ -25,6 +25,7 @@ import {
   IBALANCE,
   ICONTRACT,
   IINPUT_EVENT,
+  NETWORK_STATUS,
   NotifierService,
   Web3Actions,
   web3Selectors,
@@ -40,6 +41,7 @@ import { AngularContract } from 'src/app/dapp-injector/classes/contract';
 })
 export class DebugContractComponent implements AfterViewInit {
   blocks: Array<BlockWithTransactions> = [];
+  public blockchain_status:NETWORK_STATUS = 'loading'
   contract_abi!: Array<IABI_OBJECT>;
   walletBalance!: IBALANCE;
   contractBalance!: IBALANCE;
@@ -182,6 +184,10 @@ export class DebugContractComponent implements AfterViewInit {
     }
   }
 
+  web3modalAction(action:boolean){
+    this.dappInjectorService.launchWenmodal()
+  }
+
   ngAfterViewInit(): void {
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
 
@@ -200,6 +206,8 @@ export class DebugContractComponent implements AfterViewInit {
 
       this.onChainStuff();
     });
+
+    this.store.select(web3Selectors.chainStatus).subscribe(async (value) => { this.blockchain_status = value})
 
     this.store
       .select(web3Selectors.isNetworkBusy)
