@@ -1,95 +1,74 @@
-<onchain-home 
-  [contractHeader]="contractHeader"
-  [blockchain_is_busy]="blockchain_is_busy"
-  [signer]="signer"
-  (doFaucetEvent)="doFaucet()"
-  (openTransactionEvent)="openTransaction()"
->
-<!-- <p style="text-align: center; font-size: 20px;margin-top:20px">
+<onchain-home [contractHeader]="contractHeader" 
+[blockchain_status]="blockchain_status"
+[blockchain_is_busy]="blockchain_is_busy" [signer]="signer"
+(doFaucetEvent)="doFaucet()" (openTransactionEvent)="openTransaction()">
 
-  <wallet-display [signer]="signer" (doFaucetEvent)="doFaucet()"
-  (openTransactionEvent)="openTransaction()" ></wallet-display>
 
-</p> -->
-<div *ngIf="!!contractHeader">
-<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-  <li [ngbNavItem]="1">
-    <a ngbNavLink>Debug Contract</a>
-    <ng-template ngbNavContent>
-      <p style="text-align: center; font-size: 20px">
-        <contract-show
-          *ngIf="!!contractHeader"
-          [balance]="contractBalance"
-          [contract]="contractHeader"
-        ></contract-show>
-      </p>
-      <debug-component *ngIf="myContract && myContract.contract" [debugContract]="myContract" ></debug-component>
+  <div *ngIf="!!contractHeader">
+    <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+      <li [ngbNavItem]="1">
+        <a ngbNavLink>Debug Contract</a>
+        <ng-template ngbNavContent>
+          <p style="text-align: center; font-size: 20px">
+            <contract-show *ngIf="!!contractHeader" [balance]="contractBalance" [contract]="contractHeader">
+            </contract-show>
+          </p>
+          <debug-component *ngIf="myContract && myContract.contract" [debugContract]="myContract"></debug-component>
 
-    </ng-template>
-  </li>
-  <li [ngbNavItem]="2">
-    <a ngbNavLink>Blockchain</a>
-    <ng-template ngbNavContent>
-      <blockchain
-      *ngIf="blocks !== undefined"
-      [blocks]="blocks"
-      (addBlock)="addBlock($event)"
-    ></blockchain>
-    </ng-template>
-  </li>
+        </ng-template>
+      </li>
+      <li [ngbNavItem]="2">
+        <a ngbNavLink>Blockchain</a>
+        <ng-template ngbNavContent>
+          <blockchain *ngIf="blocks !== undefined" [blocks]="blocks" (addBlock)="addBlock($event)"></blockchain>
+        </ng-template>
+      </li>
 
-</ul>
+    </ul>
 
-<div [ngbNavOutlet]="nav" class="mt-2"></div>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+  </div>
+
+
+<div *ngIf="blockchain_status == 'ethereum-not-connected' || blockchain_status ==  'wallet-not-connected'">
+  <!-- <web3-modal></web3-modal>  -->
+  <button  type="button" *ngIf="dappInjectorService.webModal?.ready == true"  class="btn btn-outline-success"  (click)="web3modalAction(true)"
+> Sign in with Metamask/Wallet
+</button>
+<div *ngIf="dappInjectorService.webModal?.ready == false" class="loadingspinner"></div>
 
 </div>
-<div *ngIf="false"
-    style="max-width: 800px; width: 90vw; margin: auto"
-    
-  >
+
+  <div *ngIf="false" style="max-width: 800px; width: 90vw; margin: auto">
     <mat-tab-group mat-align-tabs="center">
       <mat-tab label="Smart Contract">
         <p style="text-align: center; font-size: 20px">
-          <address-show
-            (doFaucetEvent)="doFaucet()"
-            (openTransactionEvent)="openTransaction()"
-            *ngIf="!!newWallet"
-            [balance]="walletBalance"
-            [address_to_show]="newWallet.address"
-          ></address-show>
+          <address-show (doFaucetEvent)="doFaucet()" (openTransactionEvent)="openTransaction()" *ngIf="!!newWallet"
+            [balance]="walletBalance" [address_to_show]="newWallet.address"></address-show>
         </p>
-        <div
-          style="
+        <div style="
             text-align: center;
             border: 1px solid rgb(47, 213, 255);
             max-width: 1300px;
             margin: 0px 10px;
             padding-bottom: 10px;
-          "
-        >
+          ">
           <p style="text-align: center; font-size: 20px">
-            <contract-show
-              *ngIf="!!contractHeader"
-              [balance]="contractBalance"
-              [contract]="contractHeader"
-            ></contract-show>
+            <contract-show *ngIf="!!contractHeader" [balance]="contractBalance" [contract]="contractHeader">
+            </contract-show>
           </p>
-          <div
-            *ngIf="eventsAbiArray.length > 0"
-            style="
+          <div *ngIf="eventsAbiArray.length > 0" style="
               text-align: center;
               max-width: 1300px;
               margin: 0px 10p;
               padding-bottom: 10px;
-            "
-          >
+            ">
             <h4>Events</h4>
             <div *ngFor="let event of events">
               <p>
                 Event:
-                <span style="font-weight: bold"
-                  >{{ event.name }} {{ event.timeStamp }}</span
-                >
+                <span style="font-weight: bold">{{ event.name }} {{ event.timeStamp }}</span>
               </p>
               <p>{{ event.payload }}</p>
             </div>
@@ -98,34 +77,28 @@
             </p>
           </div>
 
-          <div
-            style="
+          <div style="
               display: flex;
               justify-content: center;
               max-width: 1300px;
               margin: auto;
-            "
-          >
+            ">
             <ng-container #stateContainer></ng-container>
           </div>
-          <div
-            style="
+          <div style="
               display: flex;
               justify-content: center;
               max-width: 1300px;
               margin: auto;
-            "
-          >
+            ">
             <ng-container #payableContainer></ng-container>
           </div>
-          <div
-            style="
+          <div style="
               display: flex;
               justify-content: center;
               max-width: 1300px;
               margin: auto;
-            "
-          >
+            ">
             <ng-container #inputContainer></ng-container>
           </div>
         </div>
@@ -137,7 +110,6 @@
       </mat-tab>
     </mat-tab-group>
   </div>
-  </onchain-home>
+</onchain-home>
 
 
-  <dapp-loading [isBusy]="blockchain_is_busy"></dapp-loading>

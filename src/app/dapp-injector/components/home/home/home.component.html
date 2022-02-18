@@ -17,9 +17,6 @@
 <img *ngIf="blockchain_status == 'fail'" style="width:200px;margin-bottom:40px;" alt="Angular Logo"
     src="data:image/png;base64,{{no_network}}">
 
-<div *ngIf="blockchain_status == 'ethereum-not-connected' || blockchain_status ==  'wallet-not-connected'">
-  <!-- <web3-modal></web3-modal> -->
-</div>
 
  
   <div style="text-align: center; margin: auto">
@@ -92,3 +89,5 @@
       transform="translate(142.69 -634.312)" fill="#eee" />
   </svg>
 </div>
+
+<dapp-loading [isBusy]="blockchain_is_busy"></dapp-loading>

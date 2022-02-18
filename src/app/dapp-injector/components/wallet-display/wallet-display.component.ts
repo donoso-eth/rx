@@ -56,7 +56,13 @@ export class WalletDisplayComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
 
+    // this.store.select(web3Selectors.chainStatus).subscribe(value=> console.log(value))
+
+
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
+
+      console.log(value)
+
       this.address_to_show = await this.signer.getAddress()
       const balance = await this.signer.getBalance();
 
