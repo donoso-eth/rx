@@ -90,7 +90,7 @@ export class Web3ModalComponent implements AfterViewInit {
   constructor(@Inject('payload') public payload: { document:any, provider?:any }) {
     
     if (this.payload.provider !== undefined) {
-    //  this.createProviderHooks(payload.provider)
+     this.createProviderHooks(payload.provider)
     }
 
   }
@@ -100,7 +100,7 @@ export class Web3ModalComponent implements AfterViewInit {
 
 
  
-  @Input() public injectionProvider!: any;
+
 
   createWeb3Modal() {
     try {
@@ -193,16 +193,18 @@ export class Web3ModalComponent implements AfterViewInit {
     }
 
     await this.web3Modal.clearCachedProvider();
-    console.log(this.injectionProvider.signer);
+ 
 
     if (
-      this.injectionProvider &&
-      this.injectionProvider.provider &&
-      typeof this.injectionProvider.provider.disconnect == 'function'
+      this.payload.provider &&
+      this.payload.provider.provider &&
+      typeof this.payload.provider.provider.disconnect == 'function'
     ) {
       console.log('falseXXXXXX');
-      await this.injectionProvider.provider.disconnect();
+      await this.payload.provider.provider.disconnect();
     }
+    /// TO DO delete storage Item
+
     this.onDisConnect.emit();
     // setTimeout(() => {
     //   window.location.reload();
@@ -261,7 +263,7 @@ export class Web3ModalComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.loadWallets();
-   // this.connected = this.injectionProvider.found;
+   // this.connected = this.payload.provider.found;
   }
 
   async loadWallets() {
@@ -276,9 +278,6 @@ export class Web3ModalComponent implements AfterViewInit {
       // 'Torus',
     ];
 
-    // const promisesArray = [];
-
-    //promisesArray.push(myPromise1)
     const myArray = this.providerArray
       .map((map) => {
         return { ...{ name: map }, ...this.options[map] };
@@ -313,25 +312,8 @@ export class Web3ModalComponent implements AfterViewInit {
           this.ready = true;
           const cachedProvider =   window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER');
           if (cachedProvider == '"walletconnect"') {
-            console.log(cachedProvider)
-            const walletProvider =   window.localStorage.getItem('walletconnect') as any;
-            const prov = await this.connectWallet()
+            await this.connectWallet()
           }
-          // const provider = new providers.Web3Provider((window as any).ethereum);
-          // const addresses = await provider.listAccounts();
-          // // it doesn't create metamask popup
-          // if (addresses.length) {
-          //   console.log('ok');
-  
-       
-          //   this.createProviderHooks((window as any).ethereum);
-    
-          // }
-
-          // // permission already granted so request account address from metamask
-          // else {
-          //   console.log('okmoooopd');
-          // }
         }, 100);
       })
       .catch((error) => console.log(error));

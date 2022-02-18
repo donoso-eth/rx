@@ -5,7 +5,7 @@ import { ISTARTUP_CONFIG } from './models';
 
 
 export const startUpConfig:ISTARTUP_CONFIG = {
-  defaultNetwork: 'rinkeby',
+  defaultNetwork: 'localhost',
   connectedNetwork:'',
   wallet: 'wallet',
   blockSubscription: false,

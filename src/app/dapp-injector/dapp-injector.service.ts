@@ -283,7 +283,7 @@ export class DappInjectorService {
           const providerNetwork =
             metamaskProvider && (await metamaskProvider.getNetwork());
           const metamaskSigner = await metamaskProvider.getSigner();
-          console.log(providerNetwork)
+     
           this.dispatchInit({
             signer: metamaskSigner,
             provider: metamaskProvider,
@@ -292,37 +292,19 @@ export class DappInjectorService {
           this.webModal = new Web3ModalComponent({document:this.document,provider:ethereum})
 
         } else {
+          this.webModal = new Web3ModalComponent({document:this.document})
           this.store.dispatch(Web3Actions.chainStatus({status:'ethereum-not-connected'}))
           this.store.dispatch(Web3Actions.chainBusy({status: false}))
           console.log('ethereum no connecte')
-          this.webModal = new Web3ModalComponent({document:this.document})
-         
-   
         
         }
       } else {
-        this.webModal = new Web3ModalComponent({document:this.document})
-        this.webModal.loadWallets()
-        const cachedProvider =   window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER');
-
- 
-        if (cachedProvider == '"walletconnect"') {
-          console.log(cachedProvider)
-          const walletProvider =   window.localStorage.getItem('walletconnect') as any;
-          console.log(walletProvider)
-         // this.webModal = new Web3ModalComponent({document:this.document,provider:walletProvider})
-          //const webModalProvider = new providers.Web3Provider(walletProvider)
-          // const webModalSigner = await webModalProvider.getSigner();
-          // this.dispatchInit({
-          //   signer: webModalSigner,
-          //   provider: webModalProvider
-          // });
-        } else {
+        
           this.webModal = new Web3ModalComponent({document:this.document})
           this.store.dispatch(Web3Actions.chainStatus({status:'wallet-not-connected'}))
           this.store.dispatch(Web3Actions.chainBusy({status: false}))
           console.log('wallet no connecte')
-        }
+        
 
     
       }
@@ -337,6 +319,14 @@ export class DappInjectorService {
           provider: webModalProvider
         });
       })
+
+
+      this.webModal.onDisConnect.subscribe(()=> {
+        this.store.dispatch(Web3Actions.chainStatus({status:'fail'})) 
+        this.store.dispatch(Web3Actions.chainBusy({status: false}))
+      
+      })
+
     
     } else {
       try {
