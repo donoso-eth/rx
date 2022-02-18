@@ -310,8 +310,8 @@ export class DappInjectorService {
       }
       await this.webModal.loadWallets()
       this.webModal.onConnect.subscribe(async walletConnectProvider=> {
-  
-        walletConnectProvider
+        this.store.dispatch(Web3Actions.chainBusy({status: true}))
+        
         const webModalProvider = new providers.Web3Provider(walletConnectProvider)
        const webModalSigner = await webModalProvider.getSigner();
         this.dispatchInit({
