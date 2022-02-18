@@ -71,7 +71,7 @@ export class DebugContractComponent implements AfterViewInit {
     private cd: ChangeDetectorRef,
     private dialogService: DialogService,
     private notifierService: NotifierService,
-    private dappInjectorService: DappInjectorService,
+    public dappInjectorService: DappInjectorService,
     private store: Store<Web3State>,
 
   ) {}

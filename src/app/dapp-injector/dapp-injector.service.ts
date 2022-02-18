@@ -12,7 +12,13 @@ import { NotifierService } from './components/notifier/notifier.service';
 import { Web3ModalComponent } from './components/web3-modal/web3-modal/web3-modal.component';
 import { netWorkById, NETWORKS } from './constants/constants';
 import { startUpConfig } from './dapp-injector.module';
-import { ICONTRACT, ITRANSACTION_DETAILS, ITRANSACTION_RESULT,ISTARTUP_CONFIG, ICONTRACT_METADATA } from './models';
+import {
+  ICONTRACT,
+  ITRANSACTION_DETAILS,
+  ITRANSACTION_RESULT,
+  ISTARTUP_CONFIG,
+  ICONTRACT_METADATA,
+} from './models';
 import { Web3Actions } from './store';
 
 @Injectable({
@@ -24,9 +30,10 @@ export class DappInjectorService {
   webModal!: Web3ModalComponent;
   constructor(
     @Inject(DOCUMENT) private readonly document: any,
-    @Inject('debugContractMetadata') public contractMetadata: ICONTRACT_METADATA,
+    @Inject('debugContractMetadata')
+    public contractMetadata: ICONTRACT_METADATA,
     private store: Store,
-    private notifierService: NotifierService,
+    private notifierService: NotifierService
   ) {
     //this.store
     this.initChain();
@@ -99,17 +106,18 @@ export class DappInjectorService {
     const methodAbi = abi_record_array[0];
     const stateMutability = methodAbi.stateMutability;
 
-    const isTransaction = stateMutability == 'view' || stateMutability == 'pure'? false : true;
+    const isTransaction =
+      stateMutability == 'view' || stateMutability == 'pure' ? false : true;
 
     try {
-      switch ( isTransaction) {
+      switch (isTransaction) {
         case false:
           console.log('i am viewing');
           const resultFunction = await this.config.contracts[
             payload.contractKey
           ].contract[payload.method].apply(this, payload.args);
           notification_message.success = true;
-          return   { msg:notification_message, payload:resultFunction};
+          return { msg: notification_message, payload: resultFunction };
 
         default:
           console.log('i am gasing');
@@ -122,13 +130,13 @@ export class DappInjectorService {
           transaction_details.to = resultTransaction.to;
           transaction_details.gas = resultTransaction.gasUsed;
           transaction_details.bknr = resultTransaction.blockNumber;
-    
+
           result_tx.value == undefined
             ? (transaction_details.value = '0')
             : (transaction_details.value = result_tx.value.toString());
-            notification_message.success = true;
-            notification_message.success_result = transaction_details;
-          return   { msg:notification_message, payload:undefined};
+          notification_message.success = true;
+          notification_message.success_result = transaction_details;
+          return { msg: notification_message, payload: undefined };
       }
     } catch (e: any) {
       console.log(e);
@@ -159,8 +167,6 @@ export class DappInjectorService {
       notification_message.error_message = myMessage;
       return { msg: notification_message, payload: undefined };
     }
-
-  
   }
 
   async doTransaction(tx: any, faucet?: boolean) {
@@ -236,15 +242,20 @@ export class DappInjectorService {
     return notification_message;
   }
 
-  async dispatchInit(dispatchObject: { signer: Signer; provider: JsonRpcProvider | Web3Provider}) {
+  async dispatchInit(dispatchObject: {
+    signer: Signer;
+    provider: JsonRpcProvider | Web3Provider;
+  }) {
     this.config.signer = dispatchObject.signer;
     this.config.providers['main'] = dispatchObject.provider;
 
-    const contract = new AngularContract({metadata:this.contractMetadata, provider:dispatchObject.provider, signer:dispatchObject.signer})
+    const contract = new AngularContract({
+      metadata: this.contractMetadata,
+      provider: dispatchObject.provider,
+      signer: dispatchObject.signer,
+    });
 
-
-
-    this.config.contracts['myContract'] = contract
+    this.config.contracts['myContract'] = contract;
 
     await this.getDollarEther();
     this.store.dispatch(
@@ -253,19 +264,20 @@ export class DappInjectorService {
 
     const providerNetwork = await dispatchObject.provider.getNetwork();
 
-    const networkString =  netWorkById(providerNetwork.chainId)?.name as string
-    console.log(networkString)
-    this.store.dispatch(Web3Actions.setSignerNetwork({network:networkString}))
-    
-      console.log('success')
+    const networkString = netWorkById(providerNetwork.chainId)?.name as string;
+    console.log(networkString);
+    this.store.dispatch(
+      Web3Actions.setSignerNetwork({ network: networkString })
+    );
 
-    this.store.dispatch(Web3Actions.chainStatus({ status: 'success'}));
+    console.log('success');
+
+    this.store.dispatch(Web3Actions.chainStatus({ status: 'success' }));
     this.store.dispatch(Web3Actions.chainBusy({ status: false }));
-  
   }
 
-  async launchWenmodal(){
-    await this.webModal.connectWallet()
+  async launchWenmodal() {
+    await this.webModal.connectWallet();
   }
 
   async initChain() {
@@ -283,92 +295,92 @@ export class DappInjectorService {
           const providerNetwork =
             metamaskProvider && (await metamaskProvider.getNetwork());
           const metamaskSigner = await metamaskProvider.getSigner();
-     
+
           this.dispatchInit({
             signer: metamaskSigner,
             provider: metamaskProvider,
           });
 
-          this.webModal = new Web3ModalComponent({document:this.document,provider:ethereum})
-
+          this.webModal = new Web3ModalComponent({
+            document: this.document,
+            provider: ethereum,
+          });
         } else {
-          this.webModal = new Web3ModalComponent({document:this.document})
-          this.store.dispatch(Web3Actions.chainStatus({status:'ethereum-not-connected'}))
-          this.store.dispatch(Web3Actions.chainBusy({status: false}))
-          console.log('ethereum no connecte')
-        
+          this.webModal = new Web3ModalComponent({ document: this.document });
+          this.store.dispatch(
+            Web3Actions.chainStatus({ status: 'ethereum-not-connected' })
+          );
+          this.store.dispatch(Web3Actions.chainBusy({ status: false }));
+          console.log('ethereum no connecte');
         }
       } else {
-        
-          this.webModal = new Web3ModalComponent({document:this.document})
-          this.store.dispatch(Web3Actions.chainStatus({status:'wallet-not-connected'}))
-          this.store.dispatch(Web3Actions.chainBusy({status: false}))
-          console.log('wallet no connecte')
-        
-
-    
+        this.webModal = new Web3ModalComponent({ document: this.document });
+        this.store.dispatch(
+          Web3Actions.chainStatus({ status: 'wallet-not-connected' })
+        );
+        this.store.dispatch(Web3Actions.chainBusy({ status: false }));
+        console.log('wallet no connecte');
       }
-      await this.webModal.loadWallets()
-      this.webModal.onConnect.subscribe(async walletConnectProvider=> {
-        this.store.dispatch(Web3Actions.chainBusy({status: true}))
-        
-        const webModalProvider = new providers.Web3Provider(walletConnectProvider)
-       const webModalSigner = await webModalProvider.getSigner();
+      await this.webModal.loadWallets();
+      this.webModal.onConnect.subscribe(async (walletConnectProvider) => {
+        this.store.dispatch(Web3Actions.chainStatus({ status: 'fail' }));
+        this.store.dispatch(Web3Actions.chainBusy({ status: true }));
+
+        const webModalProvider = new providers.Web3Provider(
+          walletConnectProvider
+        );
+        const webModalSigner = await webModalProvider.getSigner();
         this.dispatchInit({
           signer: webModalSigner,
-          provider: webModalProvider
+          provider: webModalProvider,
         });
-      })
+      });
 
-
-      this.webModal.onDisConnect.subscribe(()=> {
-        this.store.dispatch(Web3Actions.chainStatus({status:'fail'})) 
-        this.store.dispatch(Web3Actions.chainBusy({status: false}))
-      
-      })
-
-    
+      this.webModal.onDisConnect.subscribe(() => {
+        console.log('i am disconnecting')
+        this.store.dispatch(Web3Actions.chainStatus({ status: 'loading' }));
+        this.store.dispatch(Web3Actions.chainBusy({ status: false }));
+      });
     } else {
       try {
- 
+        const hardhatProvider = await this.createProvider([
+          NETWORKS[this.config.defaultNetwork].rpcUrl,
+        ]);
+        let wallet: Wallet;
 
-       const hardhatProvider = await this.createProvider([NETWORKS[this.config.defaultNetwork].rpcUrl]);
-      let wallet: Wallet;
+        switch (this.config.wallet) {
+          case 'burner':
+            const currentPrivateKey =
+              window.localStorage.getItem('metaPrivateKey');
+            if (currentPrivateKey) {
+              wallet = new Wallet(currentPrivateKey);
+            } else {
+              wallet = Wallet.createRandom();
+              const privateKey = wallet._signingKey().privateKey;
+              window.localStorage.setItem('metaPrivateKey', privateKey);
+            }
+            break;
 
-      switch (this.config.wallet) {
-        case 'burner':
-          const currentPrivateKey =
-            window.localStorage.getItem('metaPrivateKey');
-          if (currentPrivateKey) {
-            wallet = new Wallet(currentPrivateKey);
-          } else {
-            wallet = Wallet.createRandom();
-            const privateKey = wallet._signingKey().privateKey;
-            window.localStorage.setItem('metaPrivateKey', privateKey);
-          }
-          break;
+          default:
+            let privKey = ''; //environment.privKey
+            wallet = new Wallet(privKey);
+            break;
+        }
 
-        default:
-          let privKey = ''; //environment.privKey
-          wallet = new Wallet(privKey);
-          break;
+        ////// local wallet
+        const hardhatSigner = await wallet.connect(hardhatProvider);
+
+        this.dispatchInit({ signer: hardhatSigner, provider: hardhatProvider });
+      } catch (error: any) {
+        console.log(error);
+
+        this.notifierService.showNotificationTransaction({
+          success: false,
+          error_message: error.toString(),
+        });
+        this.store.dispatch(Web3Actions.chainStatus({ status: 'fail' }));
+        this.store.dispatch(Web3Actions.chainBusy({ status: false }));
       }
-
-      ////// local wallet
-      const hardhatSigner = await wallet.connect(hardhatProvider);
-      
- 
-
-    
-    this.dispatchInit({ signer: hardhatSigner, provider: hardhatProvider });    
-    } catch (error:any) {
-      console.log(error)   
-
-      this.notifierService.showNotificationTransaction({success:false,error_message:error.toString()})
-      this.store.dispatch(Web3Actions.chainStatus({status:'fail'})) 
-      this.store.dispatch(Web3Actions.chainBusy({status: false}))
-    }
-
     }
   }
 }

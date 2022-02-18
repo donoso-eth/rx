@@ -257,6 +257,7 @@ export class Web3ModalComponent implements AfterViewInit {
     // Subscribe to provider disconnection
     provider.on('disconnect', (error: { code: number; message: string }) => {
       console.log(error);
+      console.log('disconnect')
       this.onDisConnect.emit(provider);
     });
   }
