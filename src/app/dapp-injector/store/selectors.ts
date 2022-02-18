@@ -26,6 +26,12 @@ const selectChainReady = pipe(
   filter((val) => val == 'success')
 );
 
+
+const pleaseDisconnect = pipe(
+  select(chainStatus),
+  filter((val) => val == 'disconnected')
+);
+
 const isNetworkBusy = createSelector(
   selectWeb3State,
   (state: Web3State) => state.isNetworkBusy
@@ -52,6 +58,7 @@ const selectDollarExchange= pipe(
 export const web3Selectors = {
   chainStatus,
   selectChainReady,
+  pleaseDisconnect,
   isNetworkBusy,
   selectSignerNetwork,
   selectWalletBalance,
