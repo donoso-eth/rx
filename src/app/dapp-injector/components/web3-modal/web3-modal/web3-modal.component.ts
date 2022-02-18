@@ -90,7 +90,7 @@ export class Web3ModalComponent implements AfterViewInit {
   constructor(@Inject('payload') public payload: { document:any, provider?:any }) {
     
     if (this.payload.provider !== undefined) {
-      this.createProviderHooks(payload.provider)
+    //  this.createProviderHooks(payload.provider)
     }
 
   }
@@ -227,6 +227,9 @@ export class Web3ModalComponent implements AfterViewInit {
     this.createProviderHooks(provider);
   }
 
+
+
+
   createProviderHooks(provider: any) {
 
   console.log(' I am doing hooks')
@@ -308,6 +311,12 @@ export class Web3ModalComponent implements AfterViewInit {
         setTimeout(async () => {
           // this.Web3Modal = window.Web3Modal.default;on
           this.ready = true;
+          const cachedProvider =   window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER');
+          if (cachedProvider == '"walletconnect"') {
+            console.log(cachedProvider)
+            const walletProvider =   window.localStorage.getItem('walletconnect') as any;
+            const prov = await this.connectWallet()
+          }
           // const provider = new providers.Web3Provider((window as any).ethereum);
           // const addresses = await provider.listAccounts();
           // // it doesn't create metamask popup
