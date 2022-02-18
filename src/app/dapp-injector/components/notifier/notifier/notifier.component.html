@@ -1,6 +1,9 @@
-<div>
+<!-- <div>
     {{data.success == true ? 'OK' : 'Error'}}
-</div>
+</div> -->
+<ngb-toast *ngIf="true" header="Hello" [autohide]="false" >
+  I am a simple static toast with a header.
+
 <div style="">
 <mat-icon style="    position: absolute;
 top: 6px;
@@ -19,5 +22,6 @@ cursor: pointer;" mat-flat-button (click)="snackBarRef.dismiss()">close</mat-ico
   BlockNr: {{ data.success_result.bknr}}<br>
 </div>
 </div>
+</ngb-toast>
 
   

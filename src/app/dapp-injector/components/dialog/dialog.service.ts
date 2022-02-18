@@ -13,9 +13,9 @@ export class DialogService {
   async openDialog() {
     const modalRef = this.modalService.open(TransactionComponent);
     // const dialogRef = this.dialog.open(TransactionComponent, {
-    //   width: '80%',
-    //   maxWidth: '400px',
-    //   data: {},
+    // //   width: '80%',
+    // //   maxWidth: '400px',
+    // //   data: {},
     // });
 
     const result =  await modalRef.closed.toPromise()

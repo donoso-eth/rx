@@ -10,7 +10,7 @@
   <i (click)="doFaucet()" style="
       position: absolute;
       top: 3px;
-      right: 3px;
+      left: 6px;
       font-size: 15px;
       color: #ff4081;
       cursor: pointer;
@@ -22,7 +22,7 @@
       font-size: 12px;
       justify-content: center;
       align-items: center;
-      padding: 0px 25px 0px 0px;
+      padding: 0px 5px 0px 25px;
     ">
     <div style="margin: 7px 10px 2px" #wallet></div>
     <span style="text-align:center" *ngIf="!!address_to_show">
@@ -59,11 +59,15 @@
 
       </div>
     </div>
-      <button type="button" class="btn btn-outline-warning">Disconnect</button>
+   <div  style="display: flex;flex-direction: column;margin: 0 5px 0 10px;">
+    <button type="button" style="line-height: 10px;padding: 2px;font-size: 11px;color:white" class="btn btn-primary">BlockScan</button>
+    <button type="button" style="margin-top:5px;line-height: 10px;padding: 2px;font-size: 11px;" class="btn btn-outline-warning">Disconnect</button>
     
+   </div> 
+     
     <i (click)="openTransaction()" style="
            position: absolute;
-    right: 3px;
+    left: 6px;
     bottom: 1px;
     color: #ff4081;
     cursor: pointer;
