@@ -9,6 +9,8 @@ import {
 
   Output,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { web3Selectors } from 'angular-web3';
 import { providers } from 'ethers';
 declare global {
   interface Window {
@@ -87,7 +89,7 @@ export class Web3ModalComponent implements AfterViewInit {
   web3Modal: any;
   public providerArray: Array<string> = [];
 
-  constructor(@Inject('payload') public payload: { document:any, provider?:any }) {
+  constructor(@Inject('payload') public payload: { document:any, provider?:any }, private store:Store) {
     
     if (this.payload.provider !== undefined) {
      this.createProviderHooks(payload.provider)
@@ -104,7 +106,6 @@ export class Web3ModalComponent implements AfterViewInit {
 
   createWeb3Modal() {
     try {
-      console.log(window.Web3Modal)
 
       this.web3Modal = new window.Web3Modal.default({
         network: 'mainnet', // Optional. If using WalletConnect on xDai, change network to "xdai" and add RPC info below for xDai chain.
@@ -188,22 +189,21 @@ export class Web3ModalComponent implements AfterViewInit {
   }
 
   logoutOfWeb3Modal = async () => {
+    console.log(this.web3Modal)
     if (this.web3Modal === undefined) {
       this.createWeb3Modal();
     }
-
+    console.log(this.web3Modal)
     await this.web3Modal.clearCachedProvider();
  
+    try {
 
-    if (
-      this.payload.provider &&
-      this.payload.provider.provider &&
-      typeof this.payload.provider.provider.disconnect == 'function'
-    ) {
-      console.log('falseXXXXXX');
-      await this.payload.provider.provider.disconnect();
+    
+      await this.payload.provider.disconnect();
+    } catch (error) {
+        console.log(error)
     }
-    /// TO DO delete storage Item
+
 
     this.onDisConnect.emit();
     // setTimeout(() => {
@@ -221,10 +221,10 @@ export class Web3ModalComponent implements AfterViewInit {
     if (this.providerArray.length == 0) {
       return;
     }
-    console.log('hoal');
-    console.log(this.web3Modal)
+
     const provider = await this.web3Modal.connect();
-    console.log(provider);
+    this.payload.provider = provider;
+
     this.onConnect.emit(provider);
     this.createProviderHooks(provider);
   }
@@ -244,7 +244,8 @@ export class Web3ModalComponent implements AfterViewInit {
 
     // Subscribe to chainId change
     provider.on('chainChanged', (chainId: number) => {
-      this.onConnect.emit(provider);
+       location.reload();
+      //this.onConnect.emit(provider);
     });
 
     // Subscribe to provider connection
@@ -263,11 +264,17 @@ export class Web3ModalComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.loadWallets();
+   // this.loadWallets();
    // this.connected = this.payload.provider.found;
   }
 
   async loadWallets() {
+
+    this.store.pipe(web3Selectors.pleaseDisconnect).subscribe(()=> {
+      console.log('i amdisconencting manually')
+      this.logoutOfWeb3Modal()
+    })
+
     this.loading = true;
     this.providerArray = [
       'WalletConnectProvider',

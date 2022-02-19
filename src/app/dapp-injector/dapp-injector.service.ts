@@ -169,7 +169,18 @@ export class DappInjectorService {
     }
   }
 
-  async doTransaction(tx: any, faucet?: boolean) {
+  async goScan(){
+
+  }
+
+  async doFaucet(tx: any): Promise<any| void> {
+    let tx_obj;
+    console.log(tx)
+ 
+   
+  }
+
+  async doTransaction(tx: any, signer?:any) {
     let notification_message: ITRANSACTION_RESULT = {
       success: false,
     };
@@ -183,13 +194,17 @@ export class DappInjectorService {
       value: '',
     };
     try {
-      let tx_obj;
-      if (faucet == true) {
-        const localSigner = await this.config.providers['main'].getSigner();
-        tx_obj = await localSigner.sendTransaction(tx);
-      } else {
+
+    let tx_obj;
+
+      if (!signer) {
         tx_obj = await this.config.signer!.sendTransaction(tx);
+      } else {
+        tx_obj = await signer.sendTransaction(tx);
       }
+
+     
+    
 
       let tx_result = await tx_obj.wait();
       const balance: any = await this.config.signer?.getBalance();
@@ -266,6 +281,7 @@ export class DappInjectorService {
 
     const networkString = netWorkById(providerNetwork.chainId)?.name as string;
     console.log(networkString);
+    this.config.connectedNetwork = networkString;
     this.store.dispatch(
       Web3Actions.setSignerNetwork({ network: networkString })
     );
@@ -282,6 +298,11 @@ export class DappInjectorService {
 
   async initChain() {
     this.config = startUpConfig;
+    const hardhatProvider = await this.createProvider([
+      NETWORKS[this.config.defaultNetwork].rpcUrl,
+    ]);
+
+    this.config.defaultProvider = hardhatProvider;
 
     if (this.config.wallet == 'wallet') {
       console.log('Check if 🦊 injected provider');
@@ -304,9 +325,9 @@ export class DappInjectorService {
           this.webModal = new Web3ModalComponent({
             document: this.document,
             provider: ethereum,
-          });
+          }, this.store);
         } else {
-          this.webModal = new Web3ModalComponent({ document: this.document });
+          this.webModal = new Web3ModalComponent({ document: this.document },this.store);
           this.store.dispatch(
             Web3Actions.chainStatus({ status: 'ethereum-not-connected' })
           );
@@ -314,7 +335,7 @@ export class DappInjectorService {
           console.log('ethereum no connecte');
         }
       } else {
-        this.webModal = new Web3ModalComponent({ document: this.document });
+        this.webModal = new Web3ModalComponent({ document: this.document }, this.store);
         this.store.dispatch(
           Web3Actions.chainStatus({ status: 'wallet-not-connected' })
         );
@@ -338,14 +359,12 @@ export class DappInjectorService {
 
       this.webModal.onDisConnect.subscribe(() => {
         console.log('i am disconnecting')
-        this.store.dispatch(Web3Actions.chainStatus({ status: 'loading' }));
+        this.store.dispatch(Web3Actions.chainStatus({ status: 'fail' }));
         this.store.dispatch(Web3Actions.chainBusy({ status: false }));
       });
     } else {
       try {
-        const hardhatProvider = await this.createProvider([
-          NETWORKS[this.config.defaultNetwork].rpcUrl,
-        ]);
+   
         let wallet: Wallet;
 
         switch (this.config.wallet) {

@@ -1,8 +1,9 @@
-import { Contract, ethers, Signer } from "ethers";
+import { Contract, providers, Signer } from "ethers";
 import { AngularContract } from "../classes/contract";
 import { INETWORK } from "../constants/constants";
 
 export interface ISTARTUP_CONFIG {
+  defaultProvider:providers.JsonRpcProvider | 'noop';
   defaultNetwork: string,
   connectedNetwork:string,
   wallet: 'wallet' | 'privKey' | 'burner',
@@ -27,8 +28,8 @@ export interface IABI_OBJECT {
   name?: string;
 }
 
-export interface BlockWithTransactions extends Omit<ethers.providers.Block , 'transactions'> {
-  transactions: Array<ethers.providers.TransactionResponse>;
+export interface BlockWithTransactions extends Omit<providers.Block , 'transactions'> {
+  transactions: Array<providers.TransactionResponse>;
 
 }
 

@@ -6,8 +6,9 @@ import { ISTARTUP_CONFIG } from './models';
 
 export const startUpConfig:ISTARTUP_CONFIG = {
   defaultNetwork: 'localhost',
+  defaultProvider:'noop',
   connectedNetwork:'',
-  wallet: 'burner',
+  wallet: 'wallet',
   blockSubscription: false,
   providers:{},
   contracts:{},

@@ -2,11 +2,10 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef,  EventEmitter,
 import { createIcon } from '@download/blockies';
 import { Store } from '@ngrx/store';
 import { Signer } from 'ethers';
-import { first, firstValueFrom } from 'rxjs';
-
-import { DappInjectorService } from  '../../dapp-injector.service';
+import {  firstValueFrom } from 'rxjs';
+import { netWorkByName, NETWORK_TYPE } from '../../constants/constants';
 import { convertWeiToEther, displayEther, displayUsd } from '../../helpers';
-import { web3Selectors, Web3State } from '../../store';
+import { Web3Actions, web3Selectors, Web3State } from '../../store';
 
 
 
@@ -54,11 +53,33 @@ export class WalletDisplayComponent implements AfterViewInit {
     this.doFaucetEvent.emit()
   }
 
+
+  doDisconnect() {
+    this.store.dispatch(Web3Actions.chainStatus({status: 'disconnected'}))
+  }
+
+  async doScan(){
+    if (this.network == 'localhost') { 
+      alert("No scan provider for localhost, please embed the blockchain component")
+  
+    } else {
+      
+      const href = netWorkByName(this.network as NETWORK_TYPE);
+  
+      if (href.blockExplorer) { 
+        window.open(
+          href.blockExplorer +`/address/${this.address_to_show}` ,
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      }
+  
+    }
+  }
+
+
   ngAfterViewInit(): void {
 
-    // this.store.select(web3Selectors.chainStatus).subscribe(value=> console.log(value))
-
-
+    
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
 
       console.log(value)
