@@ -10,6 +10,7 @@ import { HelloWorldContractModule } from './dapp-demos/1-hello-world-contract/he
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DappInjectorModule,  we3ReducerFunction } from 'angular-web3';
 import { DebugContractModule } from './dapp-demos/2-debug-contract/debug-contract.module';
+import { SimpleNftExampleModule } from './dapp-demos/3-simple-nft-example/simple-nft-example.module';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { DebugContractModule } from './dapp-demos/2-debug-contract/debug-contrac
     EffectsModule.forRoot([]),
     DebugContractModule,
     BrowserAnimationsModule,
+    SimpleNftExampleModule,
     DappInjectorModule
   ],
   providers:  [],

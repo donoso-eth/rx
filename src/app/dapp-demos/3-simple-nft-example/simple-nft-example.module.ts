@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { blockchain_imports, blockchain_providers } from './blockchain_wiring';
-import { OnChainService } from './on-chain.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IpfsModule } from './ipfs/ipfs.module';
 
@@ -30,7 +29,7 @@ import { IpfsModule } from './ipfs/ipfs.module';
     IpfsModule,
     blockchain_imports
   ],
-  providers:[...blockchain_providers,OnChainService],
+  providers:[...blockchain_providers] ,
   exports: [
     SimpleNftExampleComponent
   ]

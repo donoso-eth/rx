@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { OnChainService } from '../on-chain.service';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
+
 
 declare global {
   interface Window {
@@ -13,7 +14,7 @@ declare global {
 export class IpfsService {
   ipfs: any;
   loading = true;
-  constructor(public onChainService: OnChainService) {}
+  constructor(  @Inject(DOCUMENT) private readonly document: any) {}
 
   // async getFileObervable(hash:string){
   //   let myObject = '';
@@ -35,12 +36,41 @@ export class IpfsService {
 
   }
 
+  
+  loadTagToPromise(options:{name:string, type:'script' | 'link',  args:Array<{name:string, value:string}>}){
+    if (document.getElementById(options.name) !== null) { 
+        return true
+    }
+    const promiseTag = new Promise<void>((resolve, reject) => {
+      let tag = this.document.createElement(options.type);
+      try {
+        
+    
+        for (const attribute of options.args) {
+          tag[attribute.name]= attribute.value
+        
+      }
+      console.log(tag)
+        tag.onload = () => {
+      
+          resolve();
+        };
+        this.document.body.appendChild(tag);
+      } catch (error) {
+        reject();
+        console.log(error);
+      }
+    });
+    return promiseTag
+  }
+
+
   async add(file: any) {
     return await this.ipfs.add(file);
   }
   async init() {
     if (this.loading == true) {
-      await this.onChainService.loadTagToPromise({
+      await this.loadTagToPromise({
         name: 'jsoneditor_css',
         type: 'link',
         args: [
@@ -52,7 +82,7 @@ export class IpfsService {
         ],
       });
       console.log('doen');
-      await this.onChainService.loadTagToPromise({
+      await this.loadTagToPromise({
         name: 'ipfs_client',
         type: 'script',
         args: [

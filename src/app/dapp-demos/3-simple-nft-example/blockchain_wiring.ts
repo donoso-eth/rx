@@ -2,7 +2,7 @@
 import { InjectionToken } from '@angular/core';
 
 
-import SimpleNftContractMetadata from  '../../../assets/contracts/simple_nft_contract_metadata.json_metadata.json';
+import SimpleNftContractMetadata from  '../../../assets/contracts/simple_nft_contract_metadata.json';
 
 
 

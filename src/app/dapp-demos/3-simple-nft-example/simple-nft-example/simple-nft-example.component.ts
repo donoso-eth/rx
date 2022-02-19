@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { DappInjectorService } from 'angular-web3';
 
-import { OnChainService } from '../on-chain.service';
+
 
 
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
@@ -18,24 +19,14 @@ export class SimpleNftExampleComponent implements OnInit {
   myContract: any;
   contractHeader!: { name: string; address: string };
   blockchain_is_busy = false;
-  constructor(private onChainService: OnChainService) {
+  constructor(private dappInjectorService:DappInjectorService) {
 
   }
 
 
   async onChainStuff() {
-    await this.onChainService.init();
+  
 
-    this.deployer_address =
-      await this.onChainService.myProvider.Signer.getAddress();
-
-    this.myWallet = await this.onChainService.newWallet.wallet;
-    this.myContract = this.onChainService.simpleNftContract.Contract;
-
-    this.contractHeader = {
-      name: this.onChainService.simpleNftContract.metadata.name,
-      address: this.onChainService.simpleNftContract.metadata.address,
-    };
   }
 
   ngOnInit(): void {
