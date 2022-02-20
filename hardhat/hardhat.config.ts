@@ -156,6 +156,7 @@ const config: HardhatUserConfig = {
     },
     polygon: {
       url: "https://speedy-nodes-nyc.moralis.io/XXXXXXXXXXXXXXXXXXXx/polygon/mainnet",// <---- YOUR MORALIS ID! (not limited to infura)
+      //https://polygon-rpc.com
       gasPrice: 1000000000,
       accounts: {
         mnemonic: mnemonic(),
