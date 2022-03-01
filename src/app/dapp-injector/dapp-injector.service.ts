@@ -30,7 +30,7 @@ export class DappInjectorService {
   webModal!: Web3ModalComponent;
   constructor(
     @Inject(DOCUMENT) private readonly document: any,
-    @Inject('simpleNftContractMetadata')
+    @Inject('nftContractMetadata')
     public contractMetadata: ICONTRACT_METADATA,
     private store: Store,
     private notifierService: NotifierService

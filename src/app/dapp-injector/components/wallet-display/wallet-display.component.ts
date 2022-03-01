@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef,  EventEmitter,  Input,  Output,  Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { createIcon } from '@download/blockies';
 import { Store } from '@ngrx/store';
+import { DappInjectorService } from 'angular-web3';
 import { Signer } from 'ethers';
 import {  firstValueFrom } from 'rxjs';
 import { netWorkByName, NETWORK_TYPE } from '../../constants/constants';
@@ -23,6 +24,7 @@ export class WalletDisplayComponent implements AfterViewInit {
 
 
   constructor(
+    private dappInjectorService: DappInjectorService,
     private cd: ChangeDetectorRef,
     private renderer:Renderer2, private store: Store<Web3State>) {
 
@@ -78,7 +80,7 @@ export class WalletDisplayComponent implements AfterViewInit {
 
 
   ngAfterViewInit(): void {
-
+    console.log(this.dappInjectorService.config)
     
     this.store.pipe(web3Selectors.selectChainReady).subscribe(async (value) => {
 

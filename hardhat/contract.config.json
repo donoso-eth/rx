@@ -15,10 +15,10 @@
         ],
         "jsonName": "debug_contract"
     },
-    "simpleNftContract": {
-        "name": "SimpleNftContract",
-        "artifactsPath": "3-SimpleNftContract.sol/SimpleNftContract.json",
-        "jsonName": "simple_nft_contract",
+    "nftContract": {
+        "name": "NftContract",
+        "artifactsPath": "3-NftContract.sol/NftContract.json",
+        "jsonName": "nft_contract",
         "ctor": []
     }
 }

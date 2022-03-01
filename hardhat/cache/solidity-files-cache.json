@@ -1,9 +1,9 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\hardhat\\contracts\\1-HelloWorldContract.sol": {
-      "lastModificationDate": 1644609615117,
-      "contentHash": "45cf5da2c7fb4d4d1677774da2bab46b",
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/hardhat/contracts/1-HelloWorldContract.sol": {
+      "lastModificationDate": 1644747557774,
+      "contentHash": "f8351b1d666774a5f32478877e229013",
       "sourceName": "contracts/1-HelloWorldContract.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -38,8 +38,8 @@
         "HelloWorldContract"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\hardhat\\console.sol": {
-      "lastModificationDate": 1644473020784,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1644492175880,
       "contentHash": "cc4777addd464ea56fa35b1c45df0591",
       "sourceName": "hardhat/console.sol",
       "solcConfig": {
@@ -73,87 +73,8 @@
         "console"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\hardhat\\contracts\\2-DebugContract.sol": {
-      "lastModificationDate": 1644599945150,
-      "contentHash": "717eaa2b413d5a423702ad47d017e488",
-      "sourceName": "contracts/2-DebugContract.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "hardhat/console.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "DebugContract"
-      ]
-    },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\hardhat\\contracts\\3-SimpleNftContract.sol": {
-      "lastModificationDate": 1642938145842,
-      "contentHash": "b3f014651bb9e33d4be63f2f26570ae2",
-      "sourceName": "contracts/3-SimpleNftContract.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
-        "@openzeppelin/contracts/utils/Counters.sol",
-        "@openzeppelin/contracts/access/Ownable.sol",
-        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
-        "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-        "hardhat/console.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "SimpleNftContract"
-      ]
-    },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\ERC721.sol": {
-      "lastModificationDate": 1645286912487,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol": {
+      "lastModificationDate": 1646129060326,
       "contentHash": "49295810dc45f300e5f84b4b50d88a59",
       "sourceName": "@openzeppelin/contracts/token/ERC721/ERC721.sol",
       "solcConfig": {
@@ -195,8 +116,8 @@
         "ERC721"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\utils\\Counters.sol": {
-      "lastModificationDate": 1645286912235,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/utils/Counters.sol": {
+      "lastModificationDate": 1646129060163,
       "contentHash": "74654e3ae5d7f39555055dfe244dab7a",
       "sourceName": "@openzeppelin/contracts/utils/Counters.sol",
       "solcConfig": {
@@ -230,8 +151,8 @@
         "Counters"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\access\\Ownable.sol": {
-      "lastModificationDate": 1645286912793,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1646129061700,
       "contentHash": "8398972af73b4e9e5ff3b31cad86234f",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
@@ -267,8 +188,8 @@
         "Ownable"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\ERC721URIStorage.sol": {
-      "lastModificationDate": 1645286912524,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol": {
+      "lastModificationDate": 1646129060351,
       "contentHash": "580a443491d9d70eb064b0130fc3cd01",
       "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
       "solcConfig": {
@@ -304,46 +225,8 @@
         "ERC721URIStorage"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\ERC721Enumerable.sol": {
-      "lastModificationDate": 1645286912497,
-      "contentHash": "88095889e59d16821879a8083f906503",
-      "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
-      "solcConfig": {
-        "version": "0.8.4",
-        "settings": {
-          "optimizer": {
-            "enabled": false,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../ERC721.sol",
-        "./IERC721Enumerable.sol"
-      ],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "ERC721Enumerable"
-      ]
-    },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721.sol": {
-      "lastModificationDate": 1645286912693,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/token/ERC721/IERC721.sol": {
+      "lastModificationDate": 1646129060684,
       "contentHash": "27d219ec6f69478d065fdbfa7931da68",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721.sol",
       "solcConfig": {
@@ -379,8 +262,8 @@
         "IERC721"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\IERC721Receiver.sol": {
-      "lastModificationDate": 1645286912722,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol": {
+      "lastModificationDate": 1646129060819,
       "contentHash": "592df588492d45fdcf46b3cb608c0fbf",
       "sourceName": "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
       "solcConfig": {
@@ -414,8 +297,8 @@
         "IERC721Receiver"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\IERC721Metadata.sol": {
-      "lastModificationDate": 1645286912712,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol": {
+      "lastModificationDate": 1646129060780,
       "contentHash": "efbc0d15b80a74e34dbe8da0f3e879bb",
       "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol",
       "solcConfig": {
@@ -451,8 +334,8 @@
         "IERC721Metadata"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\utils\\Address.sol": {
-      "lastModificationDate": 1645286912149,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/utils/Address.sol": {
+      "lastModificationDate": 1646129060111,
       "contentHash": "ad714a6368ee7d43cded6bbe8af0b155",
       "sourceName": "@openzeppelin/contracts/utils/Address.sol",
       "solcConfig": {
@@ -486,8 +369,8 @@
         "Address"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\utils\\Context.sol": {
-      "lastModificationDate": 1645286912230,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1646129060129,
       "contentHash": "5f2c5c4b6af2dd4551027144797bc8be",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -521,8 +404,8 @@
         "Context"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\utils\\Strings.sol": {
-      "lastModificationDate": 1645286912867,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/utils/Strings.sol": {
+      "lastModificationDate": 1646129062441,
       "contentHash": "9c54c6c065d9e590fdcdd72c451425b9",
       "sourceName": "@openzeppelin/contracts/utils/Strings.sol",
       "solcConfig": {
@@ -556,8 +439,8 @@
         "Strings"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\ERC165.sol": {
-      "lastModificationDate": 1645286912373,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/utils/introspection/ERC165.sol": {
+      "lastModificationDate": 1646129060244,
       "contentHash": "0e7db055ce108f9da7bb6686a00287c0",
       "sourceName": "@openzeppelin/contracts/utils/introspection/ERC165.sol",
       "solcConfig": {
@@ -593,8 +476,8 @@
         "ERC165"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\utils\\introspection\\IERC165.sol": {
-      "lastModificationDate": 1645286912651,
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+      "lastModificationDate": 1646129060669,
       "contentHash": "03e6768535ac4da0e9756f1d8a4a018a",
       "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
       "solcConfig": {
@@ -628,10 +511,10 @@
         "IERC165"
       ]
     },
-    "C:\\Users\\javie\\Documents\\WEB\\BLOCKCHAIN\\rx\\node_modules\\@openzeppelin\\contracts\\token\\ERC721\\extensions\\IERC721Enumerable.sol": {
-      "lastModificationDate": 1645286912704,
-      "contentHash": "f4dd06783f321aa26179bc2b6e361c29",
-      "sourceName": "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol",
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/hardhat/contracts/2-DebugContract.sol": {
+      "lastModificationDate": 1644747557774,
+      "contentHash": "b5de13e7eae90d9cce28d50752e7dc02",
+      "sourceName": "contracts/2-DebugContract.sol",
       "solcConfig": {
         "version": "0.8.4",
         "settings": {
@@ -656,13 +539,54 @@
         }
       },
       "imports": [
-        "../IERC721.sol"
+        "hardhat/console.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "IERC721Enumerable"
+        "DebugContract"
+      ]
+    },
+    "/Users/javier/Documents/WEB/BLOCKCHAIN/rx/hardhat/contracts/3-NftContract.sol": {
+      "lastModificationDate": 1646132492935,
+      "contentHash": "1d07ef26c973abfedd7e76a938b7bc1f",
+      "sourceName": "contracts/3-NftContract.sol",
+      "solcConfig": {
+        "version": "0.8.4",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC721/ERC721.sol",
+        "@openzeppelin/contracts/utils/Counters.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "NftContract"
       ]
     }
   }

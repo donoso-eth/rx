@@ -2,12 +2,12 @@
 import { InjectionToken } from '@angular/core';
 
 
-import SimpleNftContractMetadata from  '../../../assets/contracts/simple_nft_contract_metadata.json';
+import NftContractMetadata from  '../../../assets/contracts/nft_contract_metadata.json';
 
 
 
 
-export const blockchain_providers = [ {provide: 'simpleNftContractMetadata', useValue: SimpleNftContractMetadata},
+export const blockchain_providers = [ {provide: 'nftContractMetadata', useValue: NftContractMetadata},
 ]
 
 ////// Common Components Wirings
