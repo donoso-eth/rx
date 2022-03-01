@@ -25,11 +25,11 @@ import {
 export const INFURA_ID = '460f40a260564ac4a4f4b3fffb032dad';
 
 @Component({
-  selector: 'simple-nft-contract',
-  templateUrl: './simple-nft-example.component.html',
-  styleUrls: ['./simple-nft-example.component.css'],
+  selector: 'nft-contract',
+  templateUrl: './nft-contract.component.html',
+  styleUrls: ['./nft-contract.component.css'],
 })
-export class SimpleNftExampleComponent implements AfterViewInit {
+export class NftContractComponent implements AfterViewInit {
   public blockchain_status: NETWORK_STATUS = 'loading';
   contract_abi!: Array<IABI_OBJECT>;
   walletBalance!: IBALANCE;
